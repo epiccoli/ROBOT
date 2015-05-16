@@ -1,0 +1,35 @@
+    #include <PinChangeInt.h>
+    #include <PinChangeIntConfig.h>
+     
+    #define PIN 53  // the pin we are interested in
+    volatile byte burp=0;    // a counter to see how many times the pin has changed
+    byte cmd=0;     // a place to put our serial data
+     
+    void setup() {
+      Serial.begin(9600);
+      Serial.print("PinChangeInt test on pin ");
+      Serial.print(PIN);
+      Serial.println();
+      pinMode(PIN, INPUT);     //set the pin to input
+      digitalWrite(PIN, HIGH); //use the internal pullup resistor
+      PCintPort::attachInterrupt(PIN, burpcount,RISING); // attach a PinChange Interrupt to our pin on the rising edge
+    // (RISING, FALLING and CHANGE all work with this library)
+    // and execute the function burpcount when that pin changes
+      }
+     
+    void loop() {
+      cmd=Serial.read();  
+      if (cmd=='p')
+      {
+        Serial.print("burpcount:\t");
+        Serial.println(burp, DEC);
+      }
+      cmd=0;
+    }
+     
+    void burpcount()
+    {
+      burp++;
+    }
+
+
