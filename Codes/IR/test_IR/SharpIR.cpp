@@ -44,9 +44,9 @@
 
 
 
-SharpIR::SharpIR(int irPin, int avg, int tolerance, int sensorModel) {
+SharpIR::SharpIR(int MUXPin, int avg, int tolerance, int sensorModel) {
   
-    _irPin=irPin;
+    _MUXPin=MUXPin;
     _avg=avg;
     _tol=tolerance/100;
     _model=sensorModel;
@@ -55,10 +55,12 @@ SharpIR::SharpIR(int irPin, int avg, int tolerance, int sensorModel) {
  
 }
 
+// Do we need a destructor??
+
 
 // When you initialize the library object on your sketch you have to pass all the above parameters:
 
-// irPin is obviously the pin where the IR sensor is attached
+// MUXPin is obviously the pin where the IR sensor is attached
 // avg is the number of readings the library does
 // tolerance indicates how similar a value has to be from the last value to be taken as valid. It should be a
 //    value between 0 and 100, like a %. A value of 93 would mean that one value has to be, at least, 93% to the
@@ -72,7 +74,7 @@ SharpIR::SharpIR(int irPin, int avg, int tolerance, int sensorModel) {
 
 int SharpIR::cm() {
     
-    int raw=analogRead(_irPin);
+    int raw=readIR(_MUXPin);
     float voltFromRaw=map(raw, 0, 1023, 0, 5000);
     
     int puntualDistance;
@@ -93,28 +95,28 @@ int SharpIR::cm() {
 
 }
 
-// int SharpIR::mm() {
-//     
-//     int raw=analogRead(_irPin);
-//     float voltFromRaw=map(raw, 0, 1023, 0, 5000);
-//     
-//     int puntualDistance;
-//     
-//     if (_model==1080) {
-//         
-//         puntualDistance=27.728*pow(voltFromRaw/1000, -1.2045)*10;
-//         
-//     }else if (_model==20150){
-//     
-//         puntualDistance=61.573*pow(voltFromRaw/1000, -1.1068)*10;
-//         
-//     }
-//     
-//     
-//     return puntualDistance;
-// 
-// 
-// }
+int SharpIR::readIR(int IR_number){
+    
+    // select the bit  
+    int r0 = bitRead(IR_number,0);        
+    int r1 = bitRead(IR_number,1);  
+    int r2 = bitRead(IR_number,2);    
+    int r3 = bitRead(IR_number,3);
+     
+    // write bit to mux from digital pins
+    digitalWrite(s0, r0);
+    digitalWrite(s1, r1);
+    digitalWrite(s2, r2);
+    digitalWrite(s3, r3);
+     
+//    delay(100);
+    // read analog out from mux
+    int dist = analogRead(SIG_pin);
+
+    
+    return dist;
+    
+}
 
 
 int SharpIR::distance() {

@@ -20,7 +20,7 @@
 
 void setupIR_MUX();
 
-int readIR(int IR_number);
+//int readIR(int IR_number);
 
 bool isObstacle();
 
@@ -30,9 +30,9 @@ bool isBottleInside();
         
 bool isBottleInPosition();
 
-int getDistanceLong(int IRpin);
-
-int getDistanceShort(int IRpin);
+//int getDistanceLong(int IRpin);
+//
+//int getDistanceShort(int IRpin);
 
 
 

@@ -24,20 +24,21 @@
 #define SharpIR_h
 
 #include "Arduino.h"
+#include "IR.h"
 
 class SharpIR
 {
   public:
-    SharpIR (int irPin, int avg, int tolerance, int sensorModel);
+    SharpIR (int MUXPin, int avg, int tolerance, int sensorModel);
     int distance();
     
     
   private:
     
     int cm();
-    int mm();
+    int readIR(int IR_number);
     
-    int _irPin;
+    int _MUXPin;
     int _model;
     int _avg;
     int _p;
