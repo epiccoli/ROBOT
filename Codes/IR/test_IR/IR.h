@@ -2,39 +2,33 @@
 #define IR_H_INCLUDED
 
 #include <Arduino.h>
-#include "SharpIR.h"
 
-// pin mapping
+class IR
+{
+public:
+//	IR(MUX mux, int mux_pin, int ir_model, int avg);
+        IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg);
+	IR(int analog_pin, int ir_model, int avg);
+//	~IR();
 
-//Mux control pins
-#define		s0		22		//value of select pin at Arduino MEGA (s0)
-#define		s1		24      //value of select pin Arduino MEGA (s1)
-#define		s2		26      //value of select pin Arduino MEGA (s2)
-#define		s3		28      //value of select pin Arduino MEGA (s3)
+	int getDistance();
 
-//Mux in "SIG" pin
-#define		SIG_pin		A0		//value of select pin Arduino MEGA (common)
+private:
+	int readIR();
+    
+//    	MUX m_mux;
+        int m_sig;
+        int m_s0;
+        int m_s1;
+        int m_s2;
+        int m_s3;
+	int m_mux_pin;
+	int m_analog_pin;
+	
+	int m_ir_model;
+	int m_avg;
 
-#define    model_1    1080
-
-
-void setupIR_MUX();
-
-//int readIR(int IR_number);
-
-bool isObstacle();
-
-bool openArmsOK();
-        
-bool isBottleInside();
-        
-bool isBottleInPosition();
-
-//int getDistanceLong(int IRpin);
-//
-//int getDistanceShort(int IRpin);
-
-
+};
 
 #endif // SERIALCLASS_H_INCLUDED
 
