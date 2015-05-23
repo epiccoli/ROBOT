@@ -190,31 +190,42 @@ bool Localization::triangulation(float angle1, float angle2, float angle3, float
   x_R = x2 + kp_31*(yp_12 - yp_23)/D;
   y_R = y2 + kp_31*(xp_23 - xp_12)/D;
 
-  //Compute angle
+  //Compute angle (made changes to the substraction of the measured angle, it should have been a rotation)
   float vec_R1_x = x1 - x_R;
   float vec_R1_y = y1 - y_R;
   float sqrtR1 = sqrt(vec_R1_x*vec_R1_x+vec_R1_y*vec_R1_y);
   vec_R1_x /= sqrtR1;
   vec_R1_y /= sqrtR1;
-  vec_R1_x -= cos(angle1);
-  vec_R1_y -= sin(angle1);
+  // Rotate vector by - angle1 so as to only be left with heading angle
+  float temp_vec_R[2];
+  temp_vec_R[0] = cos(angle1)*vec_R1_x + sin(angle1)*vec_R1_y;
+  temp_vec_R[1] = -sin(angle1)*vec_R1_x + cos(angle1)*vec_R1_y;
+  vec_R1_x = temp_vec_R[0];
+  vec_R1_y = temp_vec_R[1];
 
   float vec_R2_x = x2 - x_R;
   float vec_R2_y = y2 - y_R;
   float sqrtR2 = sqrt(vec_R2_x*vec_R2_x+vec_R2_y*vec_R2_y);
   vec_R2_x /= sqrtR2;
   vec_R2_y /= sqrtR2;
-  vec_R2_x -= cos(angle2);
-  vec_R2_y -= sin(angle2);
+  // Rotate vector by - angle2 so as to only be left with heading angle
+  temp_vec_R[0] = cos(angle2)*vec_R2_x + sin(angle2)*vec_R2_y;
+  temp_vec_R[1] = -sin(angle2)*vec_R2_x + cos(angle2)*vec_R2_y;
+  vec_R2_x = temp_vec_R[0];
+  vec_R2_y = temp_vec_R[1];
 
   float vec_R3_x = x3 - x_R;
   float vec_R3_y = y3 - y_R;
   float sqrtR3 = sqrt(vec_R3_x*vec_R3_x+vec_R3_y*vec_R3_y);
   vec_R3_x /= sqrtR3;
   vec_R3_y /= sqrtR3;
-  vec_R3_x -= cos(angle3);
-  vec_R3_y -= sin(angle3);
+  // Rotate vector by - angle3 so as to only be left with heading angle
+  temp_vec_R[0] = cos(angle3)*vec_R3_x + sin(angle3)*vec_R3_y;
+  temp_vec_R[1] = -sin(angle3)*vec_R3_x + cos(angle3)*vec_R3_y;
+  vec_R3_x = temp_vec_R[0];
+  vec_R3_y = temp_vec_R[1];
 
+  // Calculate average vector
   vec_R_x = (vec_R1_x + vec_R2_x + vec_R3_x)/3.0;
   vec_R_y = (vec_R1_y + vec_R2_y + vec_R3_y)/3.0;
 
@@ -237,13 +248,23 @@ int Localization::findBeacon(float angle, float rejection_range, float x_R, floa
     // Get vectors from previous pose and theoretical beacons
   for (int i = 0; i < 4; ++i)
   {
+    // Calculate vector between robot and beacon
     vec_theory[i][0] = beacons[i][0] - x_R;
     vec_theory[i][1] = beacons[i][1] - y_R;
     float mag = sqrt(vec_theory[i][0]*vec_theory[i][0]+vec_theory[i][1]*vec_theory[i][1]);
     vec_theory[i][0] /= mag;
     vec_theory[i][1] /= mag;
-    vec_theory[i][0] -= cos(theta_R);
-    vec_theory[i][1] -= sin(theta_R);
+
+    // Rotate vector to be in the referential with heading along x-axis (i.e same as the peak measurements)
+    float temp_vec_theory[2];
+    temp_vec_theory[0] = cos(theta_R)*vec_theory[i][0] + sin(theta_R)*vec_theory[i][1];
+    temp_vec_theory[1] = -sin(theta_R)*vec_theory[i][0] + cos(theta_R)*vec_theory[i][1];
+
+    vec_theory[i][0] = temp_vec_theory[0];
+    vec_theory[i][1] = temp_vec_theory[1];
+ 
+    // vec_theory[i][0] -= cos(theta_R); // These substractions made no sense :)
+    // vec_theory[i][1] -= sin(theta_R);
   }
 
     // Calculate metric (dot product) to determine best fit, get minimum
@@ -305,8 +326,8 @@ bool Localization::triangulation_4Point(float angles[4], int beacon, float &x_R,
       x_R += temp_pos[i][0];
       y_R += temp_pos[i][1];
       // Average angles
-      vec_x -= temp_pos[i][0];
-      vec_y -= temp_pos[i][1];
+      vec_x += temp_pos[i][0]; //Why were you subtracting here originally????????????????
+      vec_y += temp_pos[i][1];
     }
   }
   x_R /= count_valid;
