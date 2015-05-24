@@ -91,11 +91,8 @@ end
 angle_measured
 
 temp_angle_measured = sort(angle_measured(angle_measured >= 0));
-nb_measured = length(temp_angle_measured);
-angle_measured(1:nb_measured) = temp_angle_measured;
-if nb_measured < 5
-    angle_measured(nb_measured+1:end) = -ones(1,nb_measured-1);
-end
-angle_measured
+angle_measured(1:length(temp_angle_measured)) = temp_angle_measured;
+angle_measured(length(temp_angle_measured):end) = -ones(1,length(temp_angle_measured));
+
 
 
