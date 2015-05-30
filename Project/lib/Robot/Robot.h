@@ -21,8 +21,7 @@ public:
 
 private:
 	STATE _state;
-	int _timer_max;
-	int _bottle_max;
+	int _current_nb_bottle;
 
 
 	// State functions

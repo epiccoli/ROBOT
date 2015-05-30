@@ -56,8 +56,7 @@ STATE Robot::getState()  {
 //State functions
 
 void Robot::initialize() {
-	_timer_max = TIMER_MAX;
-	_bottle_max = BOTTLE_MAX;
+	_current_nb_bottle = 0;
 	//TODO: calibration stuff
 
 	_state = SEARCH;
