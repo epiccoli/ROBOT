@@ -5,7 +5,7 @@
 
 ### PROJECT_DIR
 ### This is the path to where you have created/cloned your project
-PROJECT_DIR       = Users/emilepiccoli/STI_GIT/ROBOT/Codes/IR/test_IR/
+PROJECT_DIR       = /Users/{{christophertchervenkov}}/Desktop/GitHub/ROBOT/Project
 
 ### AVR_GCC_VERSION
 ### Check if the version is equal or higher than 4.9
@@ -42,7 +42,7 @@ MONITOR_BAUDRATE  = 115200
 AVR_TOOLS_DIR     = /usr/local
 
 ### AVRDDUDE
-### Path to avrdude file.
+### Path to avrdude directory.
 AVRDDUDE          = /usr/local/bin/avrdude
 
 ### CFLAGS_STD

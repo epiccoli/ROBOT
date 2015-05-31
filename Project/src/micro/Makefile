@@ -5,7 +5,7 @@
 
 ### PROJECT_DIR
 ### This is the path to where you have created/cloned your project
-PROJECT_DIR       = Users/emilepiccoli/STI_GIT/ROBOT/Codes/IR/test_IR/
+PROJECT_DIR       = /Users/{{christophertchervenkov}}/Desktop/GitHub/ROBOT/Project
 
 ### AVR_GCC_VERSION
 ### Check if the version is equal or higher than 4.9
@@ -30,8 +30,7 @@ USER_LIB_PATH     :=  $(realpath $(PROJECT_DIR)/lib)
 ### It must be set to the board you are currently using. (i.e uno, mega, etc.)
 ### For the Arduino Uno, only BOARD_TAG is mandatory and BOARD_SUB can be equal to anything
 ### For the Arduino Mega2560, BOARD_SUB is also needed
-BOARD_TAG         = mega
-BOARD_SUB         = atmega2560
+BOARD_TAG         = micro
 
 ### MONITOR_BAUDRATE
 ### It must be set to Serial baudrate value you are using.
@@ -42,7 +41,7 @@ MONITOR_BAUDRATE  = 115200
 AVR_TOOLS_DIR     = /usr/local
 
 ### AVRDDUDE
-### Path to avrdude file.
+### Path to avrdude directory.
 AVRDDUDE          = /usr/local/bin/avrdude
 
 ### CFLAGS_STD
