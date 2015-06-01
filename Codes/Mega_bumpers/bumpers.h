@@ -60,7 +60,7 @@ Arduino pins for bumpers:
 
 // Define registers for bumpers
 #define bumpAIN PIND
-#define bumpADDR DDRD
+#define bumpADDR DDRD		
 #define bumpAPORT PORTD
 
 #define bumpBIN PINE

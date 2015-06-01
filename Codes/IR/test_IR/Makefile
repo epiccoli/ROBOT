@@ -1,220 +1,74 @@
-# Arduino makefile
-#
-# This makefile allows you to build sketches from the command line
-# without the Arduino environment (or Java).
-#
-# The Arduino environment does preliminary processing on a sketch before
-# compiling it.  If you're using this makefile instead, you'll need to do
-# a few things differently:
-#
-#   - Give your program's file a .cpp extension (e.g. foo.cpp).
-#
-#   - Put this line at top of your code: #include <WProgram.h>
-#
-#   - Write prototypes for all your functions (or define them before you
-#     call them).  A prototype declares the types of parameters a
-#     function will take and what type of value it will return.  This
-#     means that you can have a call to a function before the definition
-#     of the function.  A function prototype looks like the first line of
-#     the function, with a semi-colon at the end.  For example:
-#     int digitalRead(int pin);
-#
-# Instructions for using the makefile:
-#
-#  1. Copy this file into the folder with your sketch.
-#
-#  2. Below, modify the line containing "TARGET" to refer to the name of
-#     of your program's file without an extension (e.g. TARGET = foo).
-#
-#  3. Modify the line containg "ARDUINO" to point the directory that
-#     contains the Arduino core (for normal Arduino installations, this
-#     is the lib/targets/arduino sub-directory).
-#
-#  4. Modify the line containing "PORT" to refer to the filename
-#     representing the USB or serial connection to your Arduino board
-#     (e.g. PORT = /dev/tty.USB0).  If the exact name of this file
-#     changes, you can use * as a wildcard (e.g. PORT = /dev/tty.USB*).
-#
-#  5. At the command line, change to the directory containing your
-#     program's file and the makefile.
-#
-#  6. Type "make" and press enter to compile/verify your program.
-#
-#  7. Type "make upload", reset your Arduino board, and press enter  to
-#     upload your program to the Arduino board.
-#
-# $Id$
+### DISCLAIMER
+### This is an example Makefile and it MUST be configured to suit your needs.
+### For detailled explanations about all the avalaible options,
+### please refer to https://github.com/sudar/Arduino-Makefile/blob/master/arduino-mk-vars.md
 
-PORT = /dev/tty.usbserial*
-TARGET = IR_MUX
-ARDUINO = /Applications/arduino-0005/lib/targets/arduino
-SRC = $(ARDUINO)/buffer.c $(ARDUINO)/pins_arduino.c \
-  $(ARDUINO)/Serial.c $(ARDUINO)/uart.c $(ARDUINO)/wiring.c
-CXXSRC = $(TARGET).cpp $(ARDUINO)/HardwareSerial.cpp $(ARDUINO)/WRandom.cpp
-MCU = atmega8
-F_CPU = 16000000
-FORMAT = ihex
-UPLOAD_RATE = 19200
+### PROJECT_DIR
+### This is the path to where you have created/cloned your project
+PROJECT_DIR       = Users/emilepiccoli/STI_GIT/ROBOT/Codes/IR/test_IR/
 
-# Name of this Makefile (used for "make depend").
-MAKEFILE = Makefile
+### AVR_GCC_VERSION
+### Check if the version is equal or higher than 4.9
+AVR_GCC_VERSION  := $(shell expr `avr-gcc -dumpversion | cut -f1` \>= 4.9)
 
-# Debugging format.
-# Native formats for AVR-GCC's -g are stabs [default], or dwarf-2.
-# AVR (extended) COFF requires stabs, plus an avr-objcopy run.
-DEBUG = stabs
+### ARDMK_DIR
+### Path to the Arduino-Makefile directory.
+ARDMK_DIR         = $(PROJECT_DIR)/Arduino-Makefile
 
-OPT = s
+### ARDUINO_DIR
+### Path to the Arduino application and ressources directory.
+### for Arduino IDE 1.0.x
+# ARDUINO_DIR       = /Applications/Arduino.app/Contents/Resources/Java
+### for Arduino IDE 1.6.x
+ARDUINO_DIR       = /Applications/Arduino.app/Contents/Java
 
-# Place -D or -U options here
-CDEFS = -DF_CPU=$(F_CPU)
-CXXDEFS = -DF_CPU=$(F_CPU)
+### USER_LIB_PATH
+### Path to where the your project's libraries are stored.
+USER_LIB_PATH     :=  $(realpath $(PROJECT_DIR)/lib)
 
-# Place -I options here
-CINCS = -I$(ARDUINO)
-CXXINCS = -I$(ARDUINO)
+### BOARD_TAG & BOARD_SUB
+### It must be set to the board you are currently using. (i.e uno, mega, etc.)
+### For the Arduino Uno, only BOARD_TAG is mandatory and BOARD_SUB can be equal to anything
+### For the Arduino Mega2560, BOARD_SUB is also needed
+BOARD_TAG         = mega
+BOARD_SUB         = atmega2560
 
-# Compiler flag to set the C Standard level.
-# c89   - "ANSI" C
-# gnu89 - c89 plus GCC extensions
-# c99   - ISO C99 standard (not yet fully implemented)
-# gnu99 - c99 plus GCC extensions
-CSTANDARD = -std=gnu99
-CDEBUG = -g$(DEBUG)
-CWARN = -Wall -Wstrict-prototypes
-CTUNING = -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-#CEXTRA = -Wa,-adhlns=$(<:.c=.lst)
+### MONITOR_BAUDRATE
+### It must be set to Serial baudrate value you are using.
+MONITOR_BAUDRATE  = 115200
 
-CFLAGS = $(CDEBUG) $(CDEFS) $(CINCS) -O$(OPT) $(CWARN) $(CSTANDARD) $(CEXTRA)
-CXXFLAGS = $(CDEFS) $(CINCS) -O$(OPT)
-#ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
-LDFLAGS = 
+### AVR_TOOLS_DIR
+### Path to the AVR tools directory such as avr-gcc, avr-g++, etc.
+AVR_TOOLS_DIR     = /usr/local
 
+### AVRDDUDE
+### Path to avrdude file.
+AVRDDUDE          = /usr/local/bin/avrdude
 
-# Programming support using avrdude. Settings and variables.
-AVRDUDE_PROGRAMMER = stk500
-AVRDUDE_PORT = $(PORT)
-AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
-AVRDUDE_FLAGS = -F -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER) \
-  -b $(UPLOAD_RATE)
+### CFLAGS_STD
+CFLAGS_STD        = -std=gnu11
 
-# Program settings
-CC = avr-gcc
-CXX = avr-g++
-OBJCOPY = avr-objcopy
-OBJDUMP = avr-objdump
-SIZE = avr-size
-NM = avr-nm
-AVRDUDE = avrdude
-REMOVE = rm -f
-MV = mv -f
+### CXXFLAGS_STD
+CXXFLAGS_STD      = -std=gnu++11
 
-# Define all object files.
-OBJ = $(SRC:.c=.o) $(CXXSRC:.cpp=.o) $(ASRC:.S=.o)
+### CPPFLAGS
+### Flags you might want to set for debugging purpose. Comment to stop.
+CXXFLAGS         = -pedantic -Wall -Wextra
 
-# Define all listing files.
-LST = $(ASRC:.S=.lst) $(CXXSRC:.cpp=.lst) $(SRC:.c=.lst)
+### If avr-gcc -v is higher than 4.9, activate coloring of the output
+ifeq "$(AVR_GCC_VERSION)" "1"
+    CXXFLAGS += -fdiagnostics-color
+endif
 
-# Combine all necessary flags and optional flags.
-# Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS)
-ALL_CXXFLAGS = -mmcu=$(MCU) -I. $(CXXFLAGS)
-ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
+### MONITOR_PORT
+### The port your board is connected to. Using an '*' tries all the ports and finds the right one.
+MONITOR_PORT      = /dev/tty.usbmodem*
 
+### OBJDIR
+### This is were you put the binaries you just compile using 'make'
+CURRENT_DIR       = $(shell basename $(CURDIR))
+OBJDIR            = $(PROJECT_DIR)/bin/$(CURRENT_DIR)/$(BOARD_TAG)
 
-# Default target.
-all: build
+### path to Arduino.mk, inside the ARDMK_DIR, don't touch.
+include $(ARDMK_DIR)/Arduino.mk
 
-build: elf hex eep
-
-elf: $(TARGET).elf
-hex: $(TARGET).hex
-eep: $(TARGET).eep
-lss: $(TARGET).lss 
-sym: $(TARGET).sym
-
-# Program the device.  
-upload: $(TARGET).hex $(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
-
-
-
-
-# Convert ELF to COFF for use in debugging / simulating in AVR Studio or VMLAB.
-COFFCONVERT=$(OBJCOPY) --debugging \
---change-section-address .data-0x800000 \
---change-section-address .bss-0x800000 \
---change-section-address .noinit-0x800000 \
---change-section-address .eeprom-0x810000 
-
-
-coff: $(TARGET).elf
-	$(COFFCONVERT) -O coff-avr $(TARGET).elf $(TARGET).cof
-
-
-extcoff: $(TARGET).elf
-	$(COFFCONVERT) -O coff-ext-avr $(TARGET).elf $(TARGET).cof
-
-
-.SUFFIXES: .elf .hex .eep .lss .sym
-
-.elf.hex:
-	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
-
-.elf.eep:
-	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-	--change-section-lma .eeprom=0 -O $(FORMAT) $< $@
-
-# Create extended listing file from ELF output file.
-.elf.lss:
-	$(OBJDUMP) -h -S $< > $@
-
-# Create a symbol table from ELF output file.
-.elf.sym:
-	$(NM) -n $< > $@
-
-
-
-# Link: create ELF output file from object files.
-$(TARGET).elf: $(OBJ)
-	$(CC) $(ALL_CFLAGS) $(OBJ) --output $@ $(LDFLAGS)
-
-
-# Compile: create object files from C++ source files.
-.cpp.o:
-	$(CXX) -c $(ALL_CXXFLAGS) $< -o $@ 
-
-# Compile: create object files from C source files.
-.c.o:
-	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
-
-
-# Compile: create assembler files from C source files.
-.c.s:
-	$(CC) -S $(ALL_CFLAGS) $< -o $@
-
-
-# Assemble: create object files from assembler source files.
-.S.o:
-	$(CC) -c $(ALL_ASFLAGS) $< -o $@
-
-
-
-# Target: clean project.
-clean:
-	$(REMOVE) $(TARGET).hex $(TARGET).eep $(TARGET).cof $(TARGET).elf \
-	$(TARGET).map $(TARGET).sym $(TARGET).lss \
-	$(OBJ) $(LST) $(SRC:.c=.s) $(SRC:.c=.d) $(CXXSRC:.cpp=.s) $(CXXSRC:.cpp=.d)
-
-depend:
-	if grep '^# DO NOT DELETE' $(MAKEFILE) >/dev/null; \
-	then \
-		sed -e '/^# DO NOT DELETE/,$$d' $(MAKEFILE) > \
-			$(MAKEFILE).$$$$ && \
-		$(MV) $(MAKEFILE).$$$$ $(MAKEFILE); \
-	fi
-	echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' \
-		>> $(MAKEFILE); \
-	$(CC) -M -mmcu=$(MCU) $(CDEFS) $(CINCS) $(SRC) $(ASRC) >> $(MAKEFILE)
-
-.PHONY:	all build elf hex eep lss sym program coff extcoff clean depend
