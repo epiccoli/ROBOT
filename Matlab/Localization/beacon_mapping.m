@@ -88,14 +88,23 @@ if isFalse < oddsFalse
     quiver(0,0,vec_measured(5,1),vec_measured(5,2),'k','LineStyle','--')
 end
 
-angle_measured
-
 temp_angle_measured = sort(angle_measured(angle_measured >= 0));
 nb_measured = length(temp_angle_measured);
 angle_measured(1:nb_measured) = temp_angle_measured;
 if nb_measured < 5
     angle_measured(nb_measured+1:end) = -ones(1,nb_measured-1);
 end
-angle_measured
+
+x = state_vector(1)
+y = state_vector(2)
+theta = state_vector(3)
+
+%% clearing of variables so that we only have the state vector (estimate) and measurement
+
+clear angle_noise angle_noise_sigma color i ii isFalse isMeasured mag nb_measured oddsFalse...
+    oddsNotMeasured temp_angle_measured vec_measured vec_theory
+
+%% 
+
 
 
