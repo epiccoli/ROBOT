@@ -7,7 +7,7 @@ class IR
 {
 public:
 //	IR(MUX mux, int mux_pin, int ir_model, int avg);
-        IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg);
+    IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg);
 	IR(int analog_pin, int ir_model, int avg);
 //	~IR();
 
