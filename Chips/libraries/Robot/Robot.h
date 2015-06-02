@@ -6,6 +6,8 @@
 #include "Arduino.h"
 #include "mega_constants.h"
 #include "IR.h"
+#include "Wire.h"
+#include "Communications.h"
 
 
 

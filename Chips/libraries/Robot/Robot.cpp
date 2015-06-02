@@ -4,7 +4,7 @@
 
 // Define IR Sensors here
 IR IR_test(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C0, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
-IR IR_test(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C1, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
+IR IR_test2(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C1, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
 
 
 Robot::Robot() {
@@ -20,8 +20,6 @@ void Robot::executeState() {
 			break;
 		case SEARCH: 
 			search();
-			/*std::cout << "Mode in switch case: search"<< "\n";
-			_state=1;*/
 			break;
 		case AVOID:
 			avoid();
@@ -69,6 +67,10 @@ void Robot::initialize() {
 }
 
 void Robot::search() {
+    int motor_left;
+    int motor_right;
+    
+    
     int val = IR_test.getDistance();
     Serial.println("val");
     Serial.println(val);
@@ -77,8 +79,23 @@ void Robot::search() {
     Serial.println(val2);
     
     if (val < 10) {
-        
+        motor_left = 8;
+        motor_right= -8;
     }
+    else if (val2 < 10) {
+        motor_left = -8;
+        motor_right= 8;
+    }
+    else {
+        motor_left = 12;
+        motor_right = 12;
+    }
+    
+    Wire.beginTransmission(wildthumper_address); // alert device that something is coming
+    Wire.write(motor_left); // sent data
+    Wire.write(motor_right); // sent data
+    Wire.endTransmission(); // end transaction - i2c free again.
+
 }
 
 void Robot::avoid() {
