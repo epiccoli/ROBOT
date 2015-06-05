@@ -2,17 +2,21 @@
 
 void SetupBumpers() {
   // put bumper pins as inputs
-  bumpADDR &= ~ (bumpAPins);
   bumpBDDR &= ~ (bumpBPins);
   bumpCDDR &= ~ (bumpCPins);
 
   // set pullup resistors
-  bumpAPORT |= (bumpAPins);
   bumpBPORT |= (bumpBPins);
   bumpCPORT |= (bumpCPins);
 
-
-
+  // set 2 pins C7 and C6 to  ground
+  pinMode(ground1,OUTPUT);
+  pinMode(ground2,OUTPUT);
+  digitalWrite(ground1,LOW);
+  digitalWrite(ground2,LOW);
+  //DDRL |= ground; // set ground pins to output
+  //PORTL &=~ ground; // set ground pins to zero.
+  
   // -------------------------------------------------------
   // Setup external interrupt control registers
   // -------------------------------------------------------
@@ -22,14 +26,11 @@ void SetupBumpers() {
   //   ICSn0 = 0, ICSn1 = 1 -- falling edge
   // EICRA controls INT3:0, EICRB controls INT7:4
 
-  EICRA |= ((1 << ISC21) | (1 << ISC31));
-  EICRA &= ~ ((1 << ISC20) | (1 << ISC30));
-
   EICRB |= ((1 << ISC41) | (1 << ISC51));
   EICRB &= ~ ((1 << ISC40) | (1 << ISC50));
 
   // Enable bits in external interrupt mask to activate interrupts
-  EIMSK |= ((bumpAPins) | (bumpBPins));
+  EIMSK |= (bumpBPins);
 
 
 
@@ -62,20 +63,12 @@ void SetupBumpers() {
 // External interrupt subroutines
 // -------------------------------------------------------
 
-ISR (bumpA1vect) {
-  Serial.println("Bumper A1 triggered");
-}
-
-ISR (bumpA2vect) {
-  Serial.println("Bumper A2 triggered");
-}
-
 ISR (bumpB1vect) {
-  Serial.println("Bumper B1 triggered");
+  Serial.println("Bumper Front_Left triggered");
 }
 
 ISR (bumpB2vect) {
-  Serial.println("Bumper B2 triggered");
+  Serial.println("Bumper Front_Right triggered");
 }
 
 // -------------------------------------------------------
@@ -88,15 +81,18 @@ ISR ( bumpCvect ) {
   // to know which bumpers are activated
   //Serial.println("Pin Change Interrupt");
   if (~(bumpCIN) & (1 << bumpC1))
-    Serial.println("Bumper C1 triggered");
+    Serial.println("Bumper Back_Right triggered");
   if (~(bumpCIN) & (1 << bumpC2))
-    Serial.println("Bumper C2 triggered");
+    Serial.println("Bumper Back_Left triggered");
   if (~(bumpCIN) & (1 << bumpC3))
-    Serial.println("Bumper C3 triggered");
+    Serial.println("Bumper Right_Front triggered");
   if (~(bumpCIN) & (1 << bumpC4))
-    Serial.println("Bumper C4 triggered");
+    Serial.println("Bumper Left_Front triggered");
+  
+  /* Additional Bumpers can be added here
   if (~(bumpCIN) & (1 << bumpC5))
-    Serial.println("Bumper C5 triggered");
+    Serial.println("Bumper Left_Back triggered");
   if (~(bumpCIN) & (1 << bumpC6))
-    Serial.println("Bumper C6 triggered");
+    Serial.println("Bumper Right_Back triggered");
+    */
 }

@@ -11,6 +11,7 @@
 WildThumper WildThumper_board;
 Motor MotorLeft;
 Motor MotorRight;
+int test_speed = 100;
 
 void setup() {
   Wire.begin(wildthumper_address); // join i2c bus with address wildthumper_address
@@ -37,8 +38,10 @@ void loop() {
 
   if (1) { //WildThumper_board.Charged == 1){                   // Only power motors if battery voltage is good
     
-    MotorLeft.set_speed(getSpeed(LEFT));
-    MotorRight.set_speed(getSpeed(RIGHT));
+    MotorLeft.set_speed(test_speed);
+    MotorRight.set_speed(test_speed);
+    //MotorLeft.set_speed(getSpeed(LEFT));
+    //MotorRight.set_speed(getSpeed(RIGHT));
   }
   else {                                              // Battery is flat
     MotorLeft.turn_off();
