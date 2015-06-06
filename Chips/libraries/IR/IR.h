@@ -16,6 +16,8 @@ public:
 	int getAvgAnalog();
 	void setAvg(int new_avg);
 
+	void printSpecs();
+
 private:
 	int readIR();
     

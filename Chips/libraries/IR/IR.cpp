@@ -24,6 +24,8 @@ IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int a
 	m_ir_model = ir_model;
 	m_avg = avg;
 
+    Serial.begin(9600);
+
     // Setup of associated MUX pins on Arduino
     pinMode(m_sig, INPUT);
 
@@ -32,24 +34,24 @@ IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int a
     pinMode(m_s2, OUTPUT); 
     pinMode(m_s3, OUTPUT);
 
-    Serial.print('SIG: ');
-    Serial.print(m_sig);
-    Serial.print(', S0: ');
-    Serial.print(m_s0);
-    Serial.print(', S1: ');
-    Serial.print(m_s1);
-    Serial.print(', S2: ');
-    Serial.print(m_s2);
-    Serial.print(', S3: ');
-    Serial.print(m_s3);
-    Serial.print(', MUX pin: ');
-    Serial.print(m_mux_pin);
-    Serial.print(', Analog pin: ');
-    Serial.print(m_analog_pin);
-    Serial.print(', IR model: ');
-    Serial.print(m_ir_model);
-    Serial.print(', avg: ');
-    Serial.println(m_avg);
+    // Serial.print("SIG: ");
+    // Serial.print(m_sig);
+    // Serial.print(", S0: ");
+    // Serial.print(m_s0);
+    // Serial.print(", S1: ");
+    // Serial.print(m_s1);
+    // Serial.print(", S2: ");
+    // Serial.print(m_s2);
+    // Serial.print(", S3: ");
+    // Serial.print(m_s3);
+    // Serial.print(", MUX pin: ");
+    // Serial.print(m_mux_pin);
+    // Serial.print(", Analog pin: ");
+    // Serial.print(m_analog_pin);
+    // Serial.print(", IR model: ");
+    // Serial.print(m_ir_model);
+    // Serial.print(", avg: ");
+    // Serial.println(m_avg);
 }
 
 
@@ -64,27 +66,31 @@ IR::IR(int analog_pin, int ir_model, int avg){
     m_ir_model = ir_model;
     m_avg = avg;
 
+    Serial.begin(9600);
+
     // Setup of pinS on Arduino
     pinMode(m_analog_pin, INPUT);
 
-    Serial.print('SIG: ');
-    Serial.print(m_sig);
-    Serial.print(', S0: ');
-    Serial.print(m_s0);
-    Serial.print(', S1: ');
-    Serial.print(m_s1);
-    Serial.print(', S2: ');
-    Serial.print(m_s2);
-    Serial.print(', S3: ');
-    Serial.print(m_s3);
-    Serial.print(', MUX pin: ');
-    Serial.print(m_mux_pin);
-    Serial.print(', Analog pin: ');
-    Serial.print(m_analog_pin);
-    Serial.print(', IR model: ');
-    Serial.print(m_ir_model);
-    Serial.print(', avg: ');
-    Serial.println(m_avg);
+
+    // Serial.print("SIG: ");
+    // Serial.print(m_sig);
+    // Serial.print(", S0: ");
+    // Serial.print(m_s0);
+    // Serial.print(", S1: ");
+    // Serial.print(m_s1);
+    // Serial.print(", S2: ");
+    // Serial.print(m_s2);
+    // Serial.print(", S3: ");
+    // Serial.print(m_s3);
+    // Serial.print(", MUX pin: ");
+    // Serial.print(m_mux_pin);
+    // Serial.print(", Analog pin: ");
+    // Serial.print(m_analog_pin);
+    // Serial.print(", IR model: ");
+    // Serial.print(m_ir_model);
+    // Serial.print(", avg: ");
+    // Serial.println(m_avg);
+
 };
 
 
@@ -172,9 +178,9 @@ int IR::getDistance() {
     //for LongRangeModel
     if( m_ir_model == 1){
 
-        if(analog_signal <= 33)  
-            dist = 180;
-        else if(analog_signal <= 60)
+        // if(analog_signal <= 33)  
+        //     dist = 180;
+        if(analog_signal <= 60)
             dist = 90;
         else if(analog_signal <= 63)
             dist = 85;
@@ -422,4 +428,27 @@ int IR::getDistance() {
     
     return dist;
 
+}
+
+void IR::printSpecs() {
+
+    delay(200);
+    Serial.print("SIG: ");
+    Serial.print(m_sig);
+    Serial.print(", S0: ");
+    Serial.print(m_s0);
+    Serial.print(", S1: ");
+    Serial.print(m_s1);
+    Serial.print(", S2: ");
+    Serial.print(m_s2);
+    Serial.print(", S3: ");
+    Serial.print(m_s3);
+    Serial.print(", MUX pin: ");
+    Serial.print(m_mux_pin);
+    Serial.print(", Analog pin: ");
+    Serial.print(m_analog_pin);
+    Serial.print(", IR model: ");
+    Serial.print(m_ir_model);
+    Serial.print(", avg: ");
+    Serial.println(m_avg);
 }

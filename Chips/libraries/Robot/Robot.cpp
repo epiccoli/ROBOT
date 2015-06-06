@@ -2,15 +2,6 @@
 #include "Robot.h"
 
 
-// Define MUX here
-// MUX mux_left(MUX_L_SIG, MUX_L_S0, MUX_L_S1, MUX_L_S2, MUX_L_S3);
-// MUX mux_right(MUX_R_SIG, MUX_R_S0, MUX_R_S1, MUX_R_S2, MUX_R_S3);
-
-// //Define IR sensors
-// IR IR_test(mux_left, C0, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
-
-
-// IR IR_test2(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C1, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
 
 
 Robot::Robot() {
@@ -38,6 +29,8 @@ Robot::Robot() {
 	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
 
 	memset(_ir_values,0,17);
+
+	_mean_speed = 10;
 
 }
 
@@ -75,6 +68,7 @@ void Robot::executeState() {
 void Robot::setState(STATE new_state) {
 
 	_state = new_state;
+	return;
 }
 
 STATE Robot::getState()  {
@@ -83,7 +77,7 @@ STATE Robot::getState()  {
 
 }
 
-
+  
 
 
 //State functions
@@ -91,41 +85,80 @@ STATE Robot::getState()  {
 void Robot::initialize() {
 	_current_nb_bottle = 0;
 
+	// for(int i=0; i<17; i++){
+	// 	_ir_objects[i]->printSpecs();
+	// }	
+
 	//TODO: calibration stuff
 
 	_state = SEARCH;
+	return;
 }
 
 void Robot::search() {
-    int motor_left;
-    int motor_right;
-    
-    
-    // int val = IR_test.getDistance();
-    // Serial.println("val");
-    // Serial.println(val);
-    // // int val2 = IR_test2.getDistance();
-    // // Serial.println("val2");
-    // // Serial.println(val2);
-    
-    // if (val < 10) {
-    //     motor_left = 8;
-    //     motor_right= -8;
-    // }
-    // else if (val2 < 10) {
-    //     motor_left = -8;
-    //     motor_right= 8;
-    // }
-    // else {
-    //     motor_left = 12;
-    //     motor_right = 12;
-    // }
-    
-    // Wire.beginTransmission(wildthumper_address); // alert device that something is coming
-    // Wire.write(motor_left); // sent data
-    // Wire.write(motor_right); // sent data
-    // Wire.endTransmission(); // end transaction - i2c free again.
+    int motor_left =  _mean_speed;
+    int motor_right = _mean_speed;
 
+    //check if the robot is to close to any obstacles on its sides: if yes, stop motors and enter state AVOID
+    if (_ir_objects[ID_SIDE_LEFT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD || 
+    	_ir_objects[ID_SIDE_LEFT_BACK]->getDistance() < SIDE_DIST_THRESHOLD || 
+    	_ir_objects[ID_SIDE_RIGHT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD ||  
+    	_ir_objects[ID_SIDE_RIGHT_BACK]->getDistance() < SIDE_DIST_THRESHOLD ) {
+
+    	motor_left = 0;
+    	motor_right = 0;
+    	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+		Wire.write(motor_left); // sent data
+		Wire.write(motor_right); // sent data
+		Wire.endTransmission(); // end transaction - i2c free again.
+
+		setState(AVOID);
+		return;
+    }
+    // Read top IR's to check for obstacles
+    int top_irs[4] = {_ir_objects[ID_FRONT_TOP_LEFT_OUT]->getAvgAnalog(),
+    	_ir_objects[ID_FRONT_TOP_LEFT_IN]->getDistance(),
+    	_ir_objects[ID_FRONT_TOP_RIGHT_IN]->getDistance(),
+    	_ir_objects[ID_FRONT_TOP_RIGHT_OUT]->getAvgAnalog()};
+
+    // TODO: ADD CASE WHERE BOTTLE IN FRONT OF OBSTACLE THAT IS WITHIN THRESHOLD
+ 	if (top_irs[1] < TOP_OBSTACLE_THRESHOLD || top_irs[2] < TOP_OBSTACLE_THRESHOLD) {
+
+ 		motor_left += (int) (_mean_speed/100.0*(top_irs[2] - top_irs[1]) );
+ 		motor_right += (int) (_mean_speed/100.0*(top_irs[1] - top_irs[2]) );
+
+		// Adjust speed exponentially based on outward top IR's to avoid close calls
+		motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
+		motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
+
+ 		Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+		Wire.write(motor_left); // sent data
+		Wire.write(motor_right); // sent data
+		Wire.endTransmission(); // end transaction - i2c free again.
+ 		return;
+ 	}
+
+ 	// If no obstacles, search for bottle
+    int bottom_irs[4] = {_ir_objects[ID_FRONT_BOT_LEFT_OUT]->getDistance(),
+    	_ir_objects[ID_FRONT_BOT_LEFT_IN]->getDistance(),
+    	_ir_objects[ID_FRONT_BOT_RIGHT_IN]->getDistance(),
+    	_ir_objects[ID_FRONT_BOT_RIGHT_OUT]->getDistance()};
+
+
+    if (bottom_irs[1] < BOTTLE_FOCUS_DISTANCE && top_irs[2] < BOTTLE_FOCUS_DISTANCE) {
+    	setState(APPROACH);
+    	return;
+    }
+
+
+ 	motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
+	motor_right += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );;
+
+	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+	Wire.write(motor_left); // sent data
+	Wire.write(motor_right); // sent data
+	Wire.endTransmission(); // end transaction - i2c free again.
+	return;
 }
 
 void Robot::avoid() {
@@ -134,18 +167,23 @@ void Robot::avoid() {
 
 void Robot::approach() {
 	//TODO: write
+	Serial.println("Approaching!!!");
+	return;
 }
 
 void Robot::grab() {
 	//TODO
+	return;
 }
 
 void Robot::dropoff() {
 	//TODO
+	return;
 }
 
 void Robot::dropoffAvoid() {
 	//TODO
+	return;
 }
 
 
@@ -177,16 +215,13 @@ void Robot::dropoffAvoid() {
 
 // }
 
-void Robot::update_all_IRs(bool dist) {
-	if (dist == true) {
-		for(int i=0; i<17; i++){
+void Robot::update_all_IRs(bool dist[17]) {
+	for(int i=0; i<17; i++){
+		if (dist[i] == true)
 			_ir_values[i] = _ir_objects[i]->getDistance();
-		}	
-	}else if (dist == false) {
-		for(int i=0; i<17; i++){
-			_ir_values[i] = _ir_objects[i]->getAvgAnalog();
-		}	
-	}
+		else if (dist[i] == true)
+			_ir_values[i] = _ir_objects[i]->getDistance();
+	}		
 }
 
 int Robot::updateIR(int ir_id, bool dist) {
@@ -194,7 +229,7 @@ int Robot::updateIR(int ir_id, bool dist) {
 		int ir_value = _ir_objects[ir_id]->getDistance();
 		return ir_value;
 	}else if (dist == false) {
-		int ir_value = _ir_objects[ir_id]->getDistance();
+		int ir_value = _ir_objects[ir_id]->getAvgAnalog();
 		return ir_value;
 	}
 }

@@ -18,6 +18,14 @@ enum STATE
 #define TIMER_MAX  9	*60*1000 // in milliseconds
 #define BOTTLE_MAX  5
 
+// Robot mean speed
+#define MEAN_SPEED 5
+
+
+#define SIDE_DIST_THRESHOLD 10
+#define TOP_OBSTACLE_THRESHOLD 80
+#define BOTTLE_FOCUS_DISTANCE 30
+
 
 // Arduino Mega Pin mapping
 // TODO: Pin mapping need to be thoroughly thought out and completed
