@@ -28,6 +28,8 @@ public:
 private:
 	STATE _state;
 	int _current_nb_bottle;
+	IR* _ir_objects[17];
+	int _ir_values[17];
 
 	// State functions
 	void initialize();
@@ -41,6 +43,9 @@ private:
 
 	// Other function go here
 	void braitenberg();
+
+	void update_all_IRs(bool dist);
+	int updateIR(int ir_id, bool dist);
 
 };
 

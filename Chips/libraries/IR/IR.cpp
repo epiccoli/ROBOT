@@ -1,17 +1,17 @@
 #include "IR.h"
 
 
-IR::IR(MUX mux(int sig, int s0, int s1, int s2, int s3), int mux_pin, int ir_model, int avg) {
-    m_sig = mux.getSIG();
-    m_s0 = mux.getS0();
-    m_s1 = mux.getS1();
-    m_s2 = mux.getS2();
-    m_s3 = mux.getS3();
-    m_mux_pin = mux_pin;
-    m_analog_pin = -1;
-    m_ir_model = ir_model;
-    m_avg = avg;
-}
+// IR::IR(MUX mux(int sig, int s0, int s1, int s2, int s3), int mux_pin, int ir_model, int avg) {
+//     m_sig = mux.getSIG();
+//     m_s0 = mux.getS0();
+//     m_s1 = mux.getS1();
+//     m_s2 = mux.getS2();
+//     m_s3 = mux.getS3();
+//     m_mux_pin = mux_pin;
+//     m_analog_pin = -1;
+//     m_ir_model = ir_model;
+//     m_avg = avg;
+// }
 
 IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg){
     m_sig = sig;
@@ -23,6 +23,33 @@ IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int a
     m_analog_pin = -1;
 	m_ir_model = ir_model;
 	m_avg = avg;
+
+    // Setup of associated MUX pins on Arduino
+    pinMode(m_sig, INPUT);
+
+    pinMode(m_s0, OUTPUT); 
+    pinMode(m_s1, OUTPUT); 
+    pinMode(m_s2, OUTPUT); 
+    pinMode(m_s3, OUTPUT);
+
+    Serial.print('SIG: ');
+    Serial.print(m_sig);
+    Serial.print(', S0: ');
+    Serial.print(m_s0);
+    Serial.print(', S1: ');
+    Serial.print(m_s1);
+    Serial.print(', S2: ');
+    Serial.print(m_s2);
+    Serial.print(', S3: ');
+    Serial.print(m_s3);
+    Serial.print(', MUX pin: ');
+    Serial.print(m_mux_pin);
+    Serial.print(', Analog pin: ');
+    Serial.print(m_analog_pin);
+    Serial.print(', IR model: ');
+    Serial.print(m_ir_model);
+    Serial.print(', avg: ');
+    Serial.println(m_avg);
 }
 
 
@@ -36,6 +63,28 @@ IR::IR(int analog_pin, int ir_model, int avg){
     m_analog_pin = analog_pin;
     m_ir_model = ir_model;
     m_avg = avg;
+
+    // Setup of pinS on Arduino
+    pinMode(m_analog_pin, INPUT);
+
+    Serial.print('SIG: ');
+    Serial.print(m_sig);
+    Serial.print(', S0: ');
+    Serial.print(m_s0);
+    Serial.print(', S1: ');
+    Serial.print(m_s1);
+    Serial.print(', S2: ');
+    Serial.print(m_s2);
+    Serial.print(', S3: ');
+    Serial.print(m_s3);
+    Serial.print(', MUX pin: ');
+    Serial.print(m_mux_pin);
+    Serial.print(', Analog pin: ');
+    Serial.print(m_analog_pin);
+    Serial.print(', IR model: ');
+    Serial.print(m_ir_model);
+    Serial.print(', avg: ');
+    Serial.println(m_avg);
 };
 
 
