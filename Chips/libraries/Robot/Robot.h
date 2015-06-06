@@ -9,6 +9,7 @@
 #include "IR.h"
 #include "Wire.h"
 #include "Communications.h"
+#include "Motor.h"
 
 
 
@@ -39,6 +40,7 @@ private:
 
 
 	// Other function go here
+	void braitenberg();
 
 };
 

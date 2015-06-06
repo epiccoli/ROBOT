@@ -120,3 +120,12 @@ void Robot::dropoff() {
 void Robot::dropoffAvoid() {
 	//TODO
 }
+
+
+
+
+// Other function go here
+void braitenberg() {
+
+	
+}
