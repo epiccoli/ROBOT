@@ -1,5 +1,6 @@
-#include <Arduino.h>
+$#include <Arduino.h>
 #include <Robot.h>
+#include <MUX.h>
 #include <IR.h>
 #include <mega_bumpers.h>
 #include <mega_constants.h>

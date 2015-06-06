@@ -3,8 +3,11 @@
 
 
 // Define IR Sensors here
-IR IR_test(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C0, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
-IR IR_test2(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C1, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
+MUX mux_test(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3);
+IR IR_test(mux_left, C0, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
+
+
+// IR IR_test2(MUX_1_SIG, MUX_1_S0, MUX_1_S1, MUX_1_S2, MUX_1_S3, C1, ShortRange, 5); // new short range IR connected to C0 on MUX1, averaging 5 values for averaging.
 
 
 Robot::Robot() {
@@ -74,9 +77,9 @@ void Robot::search() {
     int val = IR_test.getDistance();
     Serial.println("val");
     Serial.println(val);
-    int val2 = IR_test2.getDistance();
-    Serial.println("val2");
-    Serial.println(val2);
+    // int val2 = IR_test2.getDistance();
+    // Serial.println("val2");
+    // Serial.println(val2);
     
     if (val < 10) {
         motor_left = 8;

@@ -1,22 +1,26 @@
 #include "IR.h"
 
 
-//IR::IR(MUX mux, int mux_pin, int ir_model, int avg){
-//	m_mux = mux;
-//	m_mux_pin = mux_pin;
-//        m_analog_pin = -1;
-//	m_ir_model = ir_model;
-//	m_avg = avg;
-//};
+IR::IR(MUX mux(int sig, int s0, int s1, int s2, int s3), int mux_pin, int ir_model, int avg) {
+    m_sig = mux.getSIG();
+    m_s0 = mux.getS0();
+    m_s1 = mux.getS1();
+    m_s2 = mux.getS2();
+    m_s3 = mux.getS3();
+    m_mux_pin = mux_pin;
+    m_analog_pin = -1;
+    m_ir_model = ir_model;
+    m_avg = avg;
+}
 
 IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg){
-        m_sig = sig;
-        m_s0 = s0;
-        m_s1 = s1;
-        m_s2 = s2;
-        m_s3 = s3;
-        m_mux_pin = mux_pin;
-        m_analog_pin = -1;
+    m_sig = sig;
+    m_s0 = s0;
+    m_s1 = s1;
+    m_s2 = s2;
+    m_s3 = s3;
+    m_mux_pin = mux_pin;
+    m_analog_pin = -1;
 	m_ir_model = ir_model;
 	m_avg = avg;
 }
@@ -89,8 +93,7 @@ int IR::readIR(){
     
 }
 
-
-int IR::getDistance() {
+int IR::getAvgAnalog() {
 
     int analog_signal = 0;
 
@@ -101,6 +104,12 @@ int IR::getDistance() {
     }
 
     analog_signal = analog_signal/m_avg;
+
+}
+
+int IR::getDistance() {
+
+    int analog_signal = getAvgAnalog();
 
     // read the corresponding position in a lookup table
  
