@@ -39,6 +39,11 @@ IR::IR(int analog_pin, int ir_model, int avg){
 };
 
 
+void IR::setAvg(int new_avg) {
+    m_avg = new_avg;
+}
+
+
 int IR::readIR(){
 
     int analog_signal = 0;

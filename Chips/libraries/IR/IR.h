@@ -14,6 +14,7 @@ public:
 
 	int getDistance();
 	int getAvgAnalog();
+	void setAvg(int new_avg);
 
 private:
 	int readIR();
