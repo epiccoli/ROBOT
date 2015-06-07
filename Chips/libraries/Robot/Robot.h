@@ -5,9 +5,11 @@
 
 #include "Arduino.h"
 #include "mega_constants.h"
+#include "MUX.h"
 #include "IR.h"
 #include "Wire.h"
 #include "Communications.h"
+#include "Motor.h"
 
 
 
@@ -26,6 +28,15 @@ public:
 private:
 	STATE _state;
 	int _current_nb_bottle;
+	IR* _ir_objects[17];
+	int _ir_values[17];
+	// int _ir_dist[17];
+	// int _ir_analog[17];
+
+	int _mean_speed;
+
+	int _motor_left;
+	int _motor_right;
 
 	// State functions
 	void initialize();
@@ -38,6 +49,10 @@ private:
 
 
 	// Other function go here
+	// void braitenberg();
+
+	void update_all_IRs(bool dist[17]) ;
+	int updateIR(int ir_id, bool dist);
 
 };
 

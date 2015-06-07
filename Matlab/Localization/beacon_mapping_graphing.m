@@ -14,14 +14,14 @@ beacons = [side_length, side_length;...
 %% Randomly initialize robot state vector
 %state_vector = [side_length*rand(), side_length*rand(), 2*pi*rand()];
 
-state_vector = [side_length*0.6, side_length*0.6, 2*pi*rand()];
+state_vector = [side_length*0.4, side_length*0.4, 2*pi*rand()];
 
 %% Plot beacons and robot
 figure()
 hold on
 plot(beacons(:,1),beacons(:,2),'or','LineWidth',4)
 plot(state_vector(:,1),state_vector(:,2),'xk','LineWidth',4)
-quiver(state_vector(:,1),state_vector(:,2),cos(state_vector(:,3)),sin(state_vector(:,3)),'k','LineWidth',4)
+quiver(state_vector(:,1),state_vector(:,2),cos(state_vector(:,3)),sin(state_vector(:,3)),'k','LineWidth',4,'LineStyle','--')
 
 %% Generate theoretical beacon vectors based on robot current position
 color = 'brgm';
@@ -34,20 +34,57 @@ for i = 1:4
     mag = sqrt(vec_theory(i,1)*vec_theory(i,1) + vec_theory(i,2)*vec_theory(i,2));
     vec_theory(i,1) = vec_theory(i,1)/mag;
     vec_theory(i,2) = vec_theory(i,2)/mag;
-    quiver(state_vector(:,1),state_vector(:,2),vec_theory(i,1),vec_theory(i,2),color(i))
+    quiver(state_vector(:,1),state_vector(:,2),vec_theory(i,1),vec_theory(i,2),color(i),'LineStyle','--')
 end
-% 
-% %% Generate theoretical beacon vectors in robot referential
-% vec_theory = ([cos(state_vector(:,3)), sin(state_vector(:,3));-sin(state_vector(:,3)),cos(state_vector(:,3))]*vec_theory')';
-% 
+
+%% Randomly initialize robot state vector
+%state_vector = [side_length*rand(), side_length*rand(), 2*pi*rand()];
+
+state_vector_next = [state_vector(1)+1.5*cos(state_vector(3)), state_vector(2)+1.5*sin(state_vector(3)), state_vector(3)+pi*0.1];
+
+%% Plot beacons and robot
 % figure()
 % hold on
-% quiver(0,0,1,0,'k','LineWidth',4)
-% quiver(0,0,vec_theory(1,1),vec_theory(1,2),color(1))
-% quiver(0,0,vec_theory(2,1),vec_theory(2,2),color(2))
-% quiver(0,0,vec_theory(3,1),vec_theory(3,2),color(3))
-% quiver(0,0,vec_theory(4,1),vec_theory(4,2),color(4))
-% 
+% plot(beacons(:,1),beacons(:,2),'or','LineWidth',4)
+% plot(state_vector(:,1),state_vector(:,2),'xk','LineWidth',4)
+quiver(state_vector_next(:,1),state_vector_next(:,2),cos(state_vector_next(:,3)),sin(state_vector_next(:,3)),'k','LineWidth',4)
+
+%% Generate theoretical beacon vectors based on robot current position
+color = 'brgm';
+vec_measured = zeros(4,2);
+
+for i = 1:4
+    
+    vec_measured(i,1) = beacons(i,1) - state_vector_next(1);
+    vec_measured(i,2) = beacons(i,2) - state_vector_next(2);
+    mag = sqrt(vec_measured(i,1)*vec_measured(i,1) + vec_measured(i,2)*vec_measured(i,2));
+    vec_measured(i,1) = vec_measured(i,1)/mag;
+    vec_measured(i,2) = vec_measured(i,2)/mag;
+    quiver(state_vector_next(:,1),state_vector_next(:,2),vec_measured(i,1),vec_measured(i,2),color(i))
+end
+
+
+
+%% Generate theoretical beacon vectors in robot referential
+vec_theory = ([cos(state_vector(:,3)), sin(state_vector(:,3));-sin(state_vector(:,3)),cos(state_vector(:,3))]*vec_theory')';
+
+figure()
+hold on
+quiver(0,0,1,0,'k','LineWidth',4)
+quiver(0,0,vec_theory(1,1),vec_theory(1,2),color(1),'LineStyle','--')
+quiver(0,0,vec_theory(2,1),vec_theory(2,2),color(2),'LineStyle','--')
+quiver(0,0,vec_theory(3,1),vec_theory(3,2),color(3),'LineStyle','--')
+quiver(0,0,vec_theory(4,1),vec_theory(4,2),color(4),'LineStyle','--')
+
+%% Generate theoretical beacon vectors in robot referential
+vec_measured = ([cos(state_vector_next(:,3)), sin(state_vector_next(:,3));-sin(state_vector_next(:,3)),cos(state_vector_next(:,3))]*vec_measured')';
+
+quiver(0,0,1,0,'k','LineWidth',4)
+quiver(0,0,vec_measured(1,1),vec_measured(1,2),color(1))
+quiver(0,0,vec_measured(2,1),vec_measured(2,2),color(2))
+quiver(0,0,vec_measured(3,1),vec_measured(3,2),color(3))
+quiver(0,0,vec_measured(4,1),vec_measured(4,2),color(4))
+
 % % angles_theory = atan2(vec_theory(:,2),vec_theory(:,1))*180/pi
 % % angles_theory = mod(mod(angles_theory,360) + 360, 360)
 % 

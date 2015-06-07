@@ -9,7 +9,7 @@
  *
  */
 
-#include "micro_MultiLinearCamera.h"
+#include "MultiLinearCamera.h"
 #include "Arduino.h"
 #include <avr/io.h>
 #include <stdlib.h>

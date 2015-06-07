@@ -1,24 +1,57 @@
 #include "IR.h"
 
 
-//IR::IR(MUX mux, int mux_pin, int ir_model, int avg){
-//	m_mux = mux;
-//	m_mux_pin = mux_pin;
-//        m_analog_pin = -1;
-//	m_ir_model = ir_model;
-//	m_avg = avg;
-//};
+// IR::IR(MUX mux(int sig, int s0, int s1, int s2, int s3), int mux_pin, int ir_model, int avg) {
+//     m_sig = mux.getSIG();
+//     m_s0 = mux.getS0();
+//     m_s1 = mux.getS1();
+//     m_s2 = mux.getS2();
+//     m_s3 = mux.getS3();
+//     m_mux_pin = mux_pin;
+//     m_analog_pin = -1;
+//     m_ir_model = ir_model;
+//     m_avg = avg;
+// }
 
 IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int avg){
-        m_sig = sig;
-        m_s0 = s0;
-        m_s1 = s1;
-        m_s2 = s2;
-        m_s3 = s3;
-        m_mux_pin = mux_pin;
-        m_analog_pin = -1;
+    m_sig = sig;
+    m_s0 = s0;
+    m_s1 = s1;
+    m_s2 = s2;
+    m_s3 = s3;
+    m_mux_pin = mux_pin;
+    m_analog_pin = -1;
 	m_ir_model = ir_model;
 	m_avg = avg;
+
+    Serial.begin(9600);
+
+    // Setup of associated MUX pins on Arduino
+    pinMode(m_sig, INPUT);
+
+    pinMode(m_s0, OUTPUT); 
+    pinMode(m_s1, OUTPUT); 
+    pinMode(m_s2, OUTPUT); 
+    pinMode(m_s3, OUTPUT);
+
+    // Serial.print("SIG: ");
+    // Serial.print(m_sig);
+    // Serial.print(", S0: ");
+    // Serial.print(m_s0);
+    // Serial.print(", S1: ");
+    // Serial.print(m_s1);
+    // Serial.print(", S2: ");
+    // Serial.print(m_s2);
+    // Serial.print(", S3: ");
+    // Serial.print(m_s3);
+    // Serial.print(", MUX pin: ");
+    // Serial.print(m_mux_pin);
+    // Serial.print(", Analog pin: ");
+    // Serial.print(m_analog_pin);
+    // Serial.print(", IR model: ");
+    // Serial.print(m_ir_model);
+    // Serial.print(", avg: ");
+    // Serial.println(m_avg);
 }
 
 
@@ -32,7 +65,38 @@ IR::IR(int analog_pin, int ir_model, int avg){
     m_analog_pin = analog_pin;
     m_ir_model = ir_model;
     m_avg = avg;
+
+    Serial.begin(9600);
+
+    // Setup of pinS on Arduino
+    pinMode(m_analog_pin, INPUT);
+
+
+    // Serial.print("SIG: ");
+    // Serial.print(m_sig);
+    // Serial.print(", S0: ");
+    // Serial.print(m_s0);
+    // Serial.print(", S1: ");
+    // Serial.print(m_s1);
+    // Serial.print(", S2: ");
+    // Serial.print(m_s2);
+    // Serial.print(", S3: ");
+    // Serial.print(m_s3);
+    // Serial.print(", MUX pin: ");
+    // Serial.print(m_mux_pin);
+    // Serial.print(", Analog pin: ");
+    // Serial.print(m_analog_pin);
+    // Serial.print(", IR model: ");
+    // Serial.print(m_ir_model);
+    // Serial.print(", avg: ");
+    // Serial.println(m_avg);
+
 };
+
+
+void IR::setAvg(int new_avg) {
+    m_avg = new_avg;
+}
 
 
 int IR::readIR(){
@@ -89,8 +153,7 @@ int IR::readIR(){
     
 }
 
-
-int IR::getDistance() {
+int IR::getAvgAnalog() {
 
     int analog_signal = 0;
 
@@ -102,6 +165,12 @@ int IR::getDistance() {
 
     analog_signal = analog_signal/m_avg;
 
+}
+
+int IR::getDistance() {
+
+    int analog_signal = getAvgAnalog();
+
     // read the corresponding position in a lookup table
  
     int dist = 200; //large default value
@@ -109,9 +178,9 @@ int IR::getDistance() {
     //for LongRangeModel
     if( m_ir_model == 1){
 
-        if(analog_signal <= 33)  
-            dist = 180;
-        else if(analog_signal <= 60)
+        // if(analog_signal <= 33)  
+        //     dist = 180;
+        if(analog_signal <= 60)
             dist = 90;
         else if(analog_signal <= 63)
             dist = 85;
@@ -359,4 +428,27 @@ int IR::getDistance() {
     
     return dist;
 
+}
+
+void IR::printSpecs() {
+
+    delay(200);
+    Serial.print("SIG: ");
+    Serial.print(m_sig);
+    Serial.print(", S0: ");
+    Serial.print(m_s0);
+    Serial.print(", S1: ");
+    Serial.print(m_s1);
+    Serial.print(", S2: ");
+    Serial.print(m_s2);
+    Serial.print(", S3: ");
+    Serial.print(m_s3);
+    Serial.print(", MUX pin: ");
+    Serial.print(m_mux_pin);
+    Serial.print(", Analog pin: ");
+    Serial.print(m_analog_pin);
+    Serial.print(", IR model: ");
+    Serial.print(m_ir_model);
+    Serial.print(", avg: ");
+    Serial.println(m_avg);
 }
