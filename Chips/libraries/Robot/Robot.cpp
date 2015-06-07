@@ -39,6 +39,39 @@ Robot::Robot() {
 
 }
 
+void Robot::run(){
+    Bluetooth.process();
+    
+    // run the robot in autonomous mode:
+    if(Bluetooth.buttonIsOn(2)) {
+        executeState();
+    }
+    // run the robot in demo mode:
+    else {
+        Bluetooth.send("Demo Mode");
+        if (Bluetooth.buttonIsOn(3)) {
+            stopMotors();
+        }
+        else {
+            setSpeeds(Bluetooth.getSpeedLeft(),Bluetooth.getSpeedRight());
+
+        }
+        
+        if (Bluetooth.buttonIsOn(4)) {
+            grab();
+        }
+        else if (Bluetooth.buttonIsOn(5)) {
+            search();
+        }
+        else if (Bluetooth.buttonIsOn(6)) {
+            search();
+        }
+    }
+
+
+}
+
+
 void Robot::executeState() {
 
 	switch (_state) {
@@ -231,11 +264,8 @@ void Robot::approach() {
     	_state = GRAB;
     }
 
-	Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
-	Wire.write(_motor_left); // sent data
-	Wire.write(_motor_right); // sent data
-	Wire.endTransmission(); // end transaction - i2c free again.
-
+	setSpeeds(_motor_left,_motor_right);
+    
 	Serial.println("Approaching!!!");
 	return;
 }
@@ -334,5 +364,15 @@ int Robot::updateIR(int ir_id, bool dist) {
 }
 
 
+void Robot::stopMotors() {
+    setSpeeds(0,0);
+}
+
+void Robot::setSpeeds(int motorleft,int motorright) {
+    Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
+	Wire.write(motorleft); // sent data
+	Wire.write(motorright); // sent data
+	Wire.endTransmission(); // end transaction - i2c free again.
+}
 
 

@@ -11,6 +11,7 @@
 #include "Communications.h"
 #include "Motor.h"
 #include "Arms.h"
+#include "BluetoothController.h"
 
 class Robot
 {
@@ -20,6 +21,7 @@ public:
 	// ~Robot();
 
 	void executeState();
+    void run();
 	// //void changeState(unsigned int NEW_STATE);
 	// void setState(STATE new_state);
 	// STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
@@ -55,6 +57,9 @@ private:
 
 	bool openDoor();
 	bool closeDoor();
+    
+    void stopMotors();
+    void setSpeeds(int motorleft, int motorright);
 
 	void update_all_IRs(bool dist[17]) ;
 	int updateIR(int ir_id, bool dist);

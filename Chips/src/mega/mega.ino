@@ -9,6 +9,7 @@
 #include "Communications.h"
 #include <Arms.h>
 #include <DynamixelSerial.h>
+#include "BluetoothController.h"
 
 
 

@@ -84,6 +84,19 @@ int BluetoothController::getSteer() {
   return _joySteer;
 }
 
+
+// Added for Spazzino
+
+int BluetoothController::getSpeedLeft() {
+    return  _joySpeed + _joySteer;
+}
+
+int BluetoothController::getSpeedRight() {
+    return _joySpeed - _joySteer;
+}
+
+
+
 void BluetoothController::getJoystickState(byte data[8])    {
   _joySteer = (data[1]-48)*100 + (data[2]-48)*10 + (data[3]-48);       // obtain the Int from the ASCII representation
   _joySpeed = (data[4]-48)*100 + (data[5]-48)*10 + (data[6]-48);

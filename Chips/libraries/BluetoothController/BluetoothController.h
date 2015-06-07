@@ -34,7 +34,12 @@ class BluetoothController {
     void send(String);
     void getButtonState(int);
     int getSpeed();
-    int getSteer(); 
+    int getSteer();
+    
+    // Added for Spazzino
+    int getSpeedLeft();
+    int getSpeedRight();
+    
     bool buttonIsOn(int button);
 
   private:
