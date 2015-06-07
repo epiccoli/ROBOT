@@ -141,7 +141,7 @@ void Robot::search() {
 
     	_motor_left = 0;
     	_motor_right = 0;
-    	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+    	Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
 		Wire.write(_motor_left); // sent data
 		Wire.write(_motor_right); // sent data
 		Wire.endTransmission(); // end transaction - i2c free again.
@@ -165,7 +165,7 @@ void Robot::search() {
 		_motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
 		_motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
 
- 		Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+ 		Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
 		Wire.write(_motor_left); // sent data
 		Wire.write(_motor_right); // sent data
 		Wire.endTransmission(); // end transaction - i2c free again.
@@ -197,7 +197,7 @@ void Robot::search() {
  	_motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
 	_motor_right += (int) ( _mean_speed/100.0*-(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*-(bottom_irs[2] - top_irs[1]) );
 
-	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+	Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
 	Wire.write(_motor_left); // sent data
 	Wire.write(_motor_right); // sent data
 	Wire.endTransmission(); // end transaction - i2c free again.
@@ -231,7 +231,7 @@ void Robot::approach() {
     	_state = GRAB;
     }
 
-	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+	Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
 	Wire.write(_motor_left); // sent data
 	Wire.write(_motor_right); // sent data
 	Wire.endTransmission(); // end transaction - i2c free again.

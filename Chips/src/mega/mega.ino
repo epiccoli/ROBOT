@@ -23,7 +23,7 @@ void setup()
   
   Wire.begin();
    
-  Serial.begin(Brate); //Serial1.begin(9600);
+  Serial.begin(BRATE); //Serial1.begin(9600);
 //  Spazzino.setState(SEARCH);
   
   delay(5000);
