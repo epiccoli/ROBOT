@@ -1,4 +1,4 @@
-#include "micro_localization.h"
+#include "Localization.h"
 
 Localization::Localization() {
   beacons[0][0] = 8;

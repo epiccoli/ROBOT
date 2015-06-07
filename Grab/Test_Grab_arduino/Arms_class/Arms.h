@@ -4,6 +4,20 @@
 
 */
 
+
+#ifndef Arms_INCLUDED
+#define Arms_INCLUDED
+
+#include <Arduino.h>
+#include "DynamixelSerial.h"
+
+#define ID_dyn 1
+
+
+
+
+
+
 class Arms
 {
 public:
@@ -22,3 +36,5 @@ private:
 	int _grabPos;		// *
 	int _speed;			// set the dynamixel speed 0-1023
 }; 
+
+#endif // grab_H_INCLUDED

@@ -7,6 +7,8 @@
 // NEED TO INCLUDE #include "DynamixelSerial.h"
 // Destructor maybe not needed for arms, but for door only (arms are always functioning)
 
+#include "Arms.h"
+
 Arms::Arms(int ID, int foldPos){//, int openPos, int grabPos){
 	_ID = ID;
 	_foldPos = foldPos;
