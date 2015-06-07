@@ -29,8 +29,8 @@ int global_speed = 255;
 long counter;
 
 // Controller
-int PosL_target = 5;
-int PosR_target = 5;
+int PosL_target = 10;
+int PosR_target = 10;
 
 
 void EncoderSetup() {
@@ -50,10 +50,6 @@ void EncoderSetup() {
   // Set CS11 bit for 8 prescaler
   TCCR1B &= ~ ((1 << CS10) | (1 << CS12));
   TCCR1B |= (1 << CS11);
-
-  //  // set CS10 and CS12 bit for 1024 prescaler
-  //  TCCR1B |= (1 << CS10) | (1 << CS12);
-  //  TCCR1B &=~ (1 << CS11);
 
   // enable timer compare interrupt
   TIMSK1 |= (1 << OCIE1A);
@@ -118,7 +114,7 @@ ISR ( PCINT0_vect ) {
 ISR( TIMER1_COMPA_vect ) {
 
   EL = PosL_target - 0.5 * (PosL1 + PosL2);
-  ER = PosR_target - 0.5 * (PosR1 + PosR2);
+  ER = -PosR_target - 0.5 * (PosR1 + PosR2);
 
   PosL1test = PosL1;
   PosL2test = PosL2;
@@ -152,7 +148,11 @@ ISR( TIMER1_COMPA_vect ) {
 
   OldEL = EL;
   OldER = ER;
-
+    
+  Serial.print(PosL_target);
+  Serial.print(" ");
+  Serial.println(PosR_target);
+    
 }
 
 void receiveEvent(int howMany)
@@ -168,8 +168,8 @@ void receiveEvent(int howMany)
 
  // }
 
-  Serial.print(PosL_target);
+  Serial.print(PosR1);
   Serial.print(" ");
-  Serial.println(PosR_target);
+  Serial.println(PosR2);
 }
 
