@@ -145,12 +145,13 @@ void Robot::search() {
     	_ir_objects[ID_FRONT_BOT_RIGHT_OUT]->getDistance()};
 
 
+    // If bottle within the focal distance of the two crossed bottom IR's, go into APPROACH state
     if (bottom_irs[1] < BOTTLE_FOCUS_DISTANCE && top_irs[2] < BOTTLE_FOCUS_DISTANCE) {
     	setState(APPROACH);
     	return;
     }
 
-
+    // Set motors so as to move in bottle direction
  	motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
 	motor_right += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );;
 
@@ -166,7 +167,11 @@ void Robot::avoid() {
 }
 
 void Robot::approach() {
-	//TODO: write
+	// Check side IR's to see if we can open ARMS and accept the bottle
+	int arm_irs[2] = {_ir_objects[ID_SIDE_LEFT_ARMS]->getDistance(),
+    	_ir_objects[ID_SIDE_RIGHT_ARMS]->getDistance()}; 
+
+
 	Serial.println("Approaching!!!");
 	return;
 }

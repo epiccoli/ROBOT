@@ -25,6 +25,7 @@ enum STATE
 #define SIDE_DIST_THRESHOLD 10
 #define TOP_OBSTACLE_THRESHOLD 80
 #define BOTTLE_FOCUS_DISTANCE 30
+#define ARMS_OBSTACLE_THRESHOLD 50
 
 
 // Arduino Mega Pin mapping

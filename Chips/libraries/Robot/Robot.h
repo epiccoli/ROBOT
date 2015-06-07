@@ -46,7 +46,7 @@ private:
 
 
 	// Other function go here
-	void braitenberg();
+	// void braitenberg();
 
 	void update_all_IRs(bool dist[17]) ;
 	int updateIR(int ir_id, bool dist);
