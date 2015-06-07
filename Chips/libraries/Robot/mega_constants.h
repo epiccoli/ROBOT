@@ -1,7 +1,6 @@
 #ifndef MEGA_CONSTANTS_INCLUDED
 #define MEGA_CONSTANTS_INCLUDED
 
-// #include "IR.h"
 
 enum STATE
 {
@@ -10,6 +9,7 @@ enum STATE
   AVOID,
   APPROACH,
   GRAB,
+  GO_HOME,
   DROPOFF,
   DROPOFF_AVOID,
 };
@@ -28,6 +28,12 @@ enum STATE
 #define BOTTLE_FOCUS_DISTANCE 30
 #define ARMS_OBSTACLE_THRESHOLD 50
 #define BOTTLE_GRAB_DISTANCE 7
+
+// Door
+#define DOOR_ID 3
+#define DOOR_OPEN_POS 500 // We need to calibrate this
+#define DOOR_CLOSE_POS 0
+#define DOOR_VEL 50
 
 
 // Arduino Mega Pin mapping

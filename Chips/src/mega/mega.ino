@@ -7,6 +7,9 @@
 #include <mega_constants.h>
 #include <Wire.h>
 #include "Communications.h"
+#include <Arms.h>
+#include <DynamixelSerial.h>
+
 
 
 Robot Spazzino;
@@ -32,7 +35,7 @@ void loop()
 {
   Spazzino.executeState();
 
-  delay(200000);
+//  delay(200000);
 }
 
 

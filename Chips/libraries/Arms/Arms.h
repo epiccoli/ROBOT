@@ -8,8 +8,8 @@ calibrate the dynamixel
 */
 
 
-#ifndef Arms_INCLUDED
-#define Arms_INCLUDED
+#ifndef ARMS_INCLUDED
+#define ARMS_INCLUDED
 
 #include <Arduino.h>
 #include "DynamixelSerial.h"

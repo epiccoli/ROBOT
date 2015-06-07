@@ -8,34 +8,34 @@ Robot::Robot() {
 
 	_state = INITIALIZE;
 
-	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
-	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
-	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
-	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
-	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
-	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
+	// _ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
+	// _ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
+	// _ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
+	// _ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
+	// _ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
+	// _ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
 
-	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
-	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
-	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
-	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
-	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
-	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
+	// _ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
+	// _ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
+	// _ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
+	// _ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
+	// _ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
+	// _ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
 
-	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
-	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
-	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
-	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
-	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
+	// _ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
+	// _ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
+	// _ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
+	// _ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
+	// _ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
 
-	memset(_ir_values,0,17);
+	// memset(_ir_values,0,17);
 
-	_mean_speed = 10;
+	// _mean_speed = 10;
 
-	_motor_left = 0;
-	_motor_right = 0;
+	// _motor_left = 0;
+	// _motor_right = 0;
 
-
+	// _arms = new Arms();
 
 }
 
@@ -68,17 +68,18 @@ void Robot::executeState() {
 }
 
 
-void Robot::setState(STATE new_state) {
+// These lines were useless
+// void Robot::setState(STATE new_state) {
 
-	_state = new_state;
-	return;
-}
+// 	_state = new_state;
+// 	return;
+// }
 
-STATE Robot::getState()  {
+// STATE Robot::getState()  {
 
-	 return _state;
+// 	 return _state;
 
-}
+// }
 
   
 
@@ -86,6 +87,36 @@ STATE Robot::getState()  {
 //State functions
 
 void Robot::initialize() {
+
+	// Create and initialze all IR sensors
+	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
+	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
+	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
+	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
+	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
+	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
+
+	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
+	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
+	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
+	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
+	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
+	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
+
+	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
+	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
+	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
+	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
+	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
+
+	memset(_ir_values,0,17);
+
+	_mean_speed = 10;
+
+	_motor_left = 0;
+	_motor_right = 0;
+
+	_arms = new Arms();
 	_current_nb_bottle = 0;
 
 	// for(int i=0; i<17; i++){
@@ -115,7 +146,7 @@ void Robot::search() {
 		Wire.write(_motor_right); // sent data
 		Wire.endTransmission(); // end transaction - i2c free again.
 
-		setState(AVOID);
+		_state = AVOID;
 		return;
     }
     // Read top IR's to check for obstacles
@@ -156,8 +187,8 @@ void Robot::search() {
 
 	    // If no obstacle in the way of arms, open the arms
 	    if(arm_irs[0] > ARMS_OBSTACLE_THRESHOLD || arm_irs[1] > ARMS_OBSTACLE_THRESHOLD) {
-	    	// HANDS.open(); // TODO: Still need to add ARMS class
-	    	setState(APPROACH); //If the ARMS cannot open, what do we do?
+	    	_arms->open();
+	    	_state = APPROACH; //If the ARMS cannot open, what do we do?
 	    }
     	return;
     }
@@ -197,7 +228,7 @@ void Robot::approach() {
     } else {
     	_motor_left = 0;
     	_motor_right = 0;
-    	setState(GRAB);
+    	_state = GRAB;
     }
 
 	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
@@ -210,7 +241,28 @@ void Robot::approach() {
 }
 
 void Robot::grab() {
-	//TODO
+
+	// Read internal IR's
+	int in_irs[3] = {_ir_objects[ID_IN_LEFT]->getDistance(),
+    	_ir_objects[ID_IN_MID]->getDistance(),
+    	_ir_objects[ID_IN_RIGHT]->getDistance()};
+
+	//check if bottle within a distance of 2*BOTTLE_GRAB_DISTANCE
+	if (in_irs[0] < 2*BOTTLE_GRAB_DISTANCE || in_irs[1] < 2*BOTTLE_GRAB_DISTANCE || in_irs[2] < 2*BOTTLE_GRAB_DISTANCE) {
+		_arms->grab(); // TODO: Maybe we need to check the bool to see if it worked?
+		Serial.println("Grabbing!!!");
+		delay(1000);
+		_arms->open(); // TODO: Maybe we need to check the bool to see if it worked?
+		return;
+	} else { //Otherwise if nothing detected, increment bottel count by one
+		_current_nb_bottle++;
+		_arms->fold();
+		// Checks if we still have room for more bottles
+		if (_current_nb_bottle < BOTTLE_MAX)
+			_state = SEARCH;
+		else
+			_state = GO_HOME;
+	}
 	return;
 }
 
@@ -253,6 +305,15 @@ void Robot::dropoffAvoid() {
 
 // }
 
+bool Robot::openDoor() {
+	Dynamixel.moveSpeed(DOOR_ID,DOOR_OPEN_POS,DOOR_VEL);
+}
+
+bool Robot::closeDoor() {
+	Dynamixel.moveSpeed(DOOR_ID,DOOR_CLOSE_POS,DOOR_VEL);
+}
+
+
 void Robot::update_all_IRs(bool dist[17]) {
 	for(int i=0; i<17; i++){
 		if (dist[i] == true)
@@ -271,4 +332,7 @@ int Robot::updateIR(int ir_id, bool dist) {
 		return ir_value;
 	}
 }
+
+
+
 

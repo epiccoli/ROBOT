@@ -60,7 +60,7 @@ bool Arms::grab(){
 //    Serial.println(LeftPos);
 //    Serial.print("RightPos: ");
 //    Serial.println(RightPos);
-//    return true;
+    return true;
 }
 
 bool Arms::moveArm() {

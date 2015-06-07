@@ -10,6 +10,7 @@
 #include "Wire.h"
 #include "Communications.h"
 #include "Motor.h"
+#include "Arms.h"
 
 class Robot
 {
@@ -19,9 +20,9 @@ public:
 	// ~Robot();
 
 	void executeState();
-	//void changeState(unsigned int NEW_STATE);
-	void setState(STATE new_state);
-	STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
+	// //void changeState(unsigned int NEW_STATE);
+	// void setState(STATE new_state);
+	// STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
 
 private:
 	STATE _state;
@@ -30,6 +31,8 @@ private:
 	int _ir_values[17];
 	// int _ir_dist[17];
 	// int _ir_analog[17];
+
+	Arms* _arms;
 
 	int _mean_speed;
 
@@ -42,12 +45,16 @@ private:
 	void avoid();
 	void approach();
 	void grab();
+	void goHome();
 	void dropoff();
 	void dropoffAvoid();
 
 
 	// Other function go here
 	// void braitenberg();
+
+	bool openDoor();
+	bool closeDoor();
 
 	void update_all_IRs(bool dist[17]) ;
 	int updateIR(int ir_id, bool dist);
