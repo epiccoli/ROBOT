@@ -1,9 +1,20 @@
 #ifndef _CALIBRATION_
 #define _CALIBRATION_
 
-#define WINDOW_WIDTH  5
-#define PEAK_DELTA 20
-#define REJECTION_ANGLE 5//*2*PI/360.0
+#define WINDOW_HALF_WIDTH_HIGHPASS 6
+#define WINDOW_HALF_WIDTH_CONV 4
+
+#define WIDTH_LIN_INTERP 5
+#define D_LIMIT 0.00001
+
+#define PEAK_DELTA 1200
+#define REJECTION_ANGLE 20 *PI/180.0
+#define INTEGRATION_TIME 2000
+
+#define X_START 3.0
+#define Y_START 2.7
+#define THETA_START  330   /180.0*PI
+
 
 #define INF_CAM 32000
 #define INF 32000
