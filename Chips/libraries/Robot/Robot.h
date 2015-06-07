@@ -35,6 +35,9 @@ private:
 
 	int _mean_speed;
 
+	int _motor_left;
+	int _motor_right;
+
 	// State functions
 	void initialize();
 	void search();

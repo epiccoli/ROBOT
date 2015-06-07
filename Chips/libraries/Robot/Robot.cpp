@@ -32,6 +32,11 @@ Robot::Robot() {
 
 	_mean_speed = 10;
 
+	_motor_left = 0;
+	_motor_right = 0;
+
+
+
 }
 
 void Robot::executeState() {
@@ -52,8 +57,6 @@ void Robot::executeState() {
 			break;
 		case GRAB: 
 			grab();
-			/*std::cout << "grabbing and changing to searching at end" << "\n";
-			_state = SEARCH;*/
 			break;
 		case DROPOFF:
 			dropoff();
@@ -96,8 +99,8 @@ void Robot::initialize() {
 }
 
 void Robot::search() {
-    int motor_left =  _mean_speed;
-    int motor_right = _mean_speed;
+    _motor_left =  _mean_speed;
+    _motor_right = _mean_speed;
 
     //check if the robot is to close to any obstacles on its sides: if yes, stop motors and enter state AVOID
     if (_ir_objects[ID_SIDE_LEFT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD || 
@@ -105,11 +108,11 @@ void Robot::search() {
     	_ir_objects[ID_SIDE_RIGHT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD ||  
     	_ir_objects[ID_SIDE_RIGHT_BACK]->getDistance() < SIDE_DIST_THRESHOLD ) {
 
-    	motor_left = 0;
-    	motor_right = 0;
+    	_motor_left = 0;
+    	_motor_right = 0;
     	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
-		Wire.write(motor_left); // sent data
-		Wire.write(motor_right); // sent data
+		Wire.write(_motor_left); // sent data
+		Wire.write(_motor_right); // sent data
 		Wire.endTransmission(); // end transaction - i2c free again.
 
 		setState(AVOID);
@@ -124,16 +127,16 @@ void Robot::search() {
     // TODO: ADD CASE WHERE BOTTLE IN FRONT OF OBSTACLE THAT IS WITHIN THRESHOLD
  	if (top_irs[1] < TOP_OBSTACLE_THRESHOLD || top_irs[2] < TOP_OBSTACLE_THRESHOLD) {
 
- 		motor_left += (int) (_mean_speed/100.0*(top_irs[2] - top_irs[1]) );
- 		motor_right += (int) (_mean_speed/100.0*(top_irs[1] - top_irs[2]) );
+ 		_motor_left += (int) (_mean_speed/100.0*(top_irs[2] - top_irs[1]) );
+ 		_motor_right += (int) (_mean_speed/100.0*(top_irs[1] - top_irs[2]) );
 
 		// Adjust speed exponentially based on outward top IR's to avoid close calls
-		motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
-		motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
+		_motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
+		_motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
 
  		Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
-		Wire.write(motor_left); // sent data
-		Wire.write(motor_right); // sent data
+		Wire.write(_motor_left); // sent data
+		Wire.write(_motor_right); // sent data
 		Wire.endTransmission(); // end transaction - i2c free again.
  		return;
  	}
@@ -147,17 +150,25 @@ void Robot::search() {
 
     // If bottle within the focal distance of the two crossed bottom IR's, go into APPROACH state
     if (bottom_irs[1] < BOTTLE_FOCUS_DISTANCE && top_irs[2] < BOTTLE_FOCUS_DISTANCE) {
-    	setState(APPROACH);
+    	// Check side IR's to see if we can open ARMS and accept the bottle
+		int arm_irs[2] = {_ir_objects[ID_SIDE_LEFT_ARMS]->getDistance(),
+	    	_ir_objects[ID_SIDE_RIGHT_ARMS]->getDistance()};
+
+	    // If no obstacle in the way of arms, open the arms
+	    if(arm_irs[0] > ARMS_OBSTACLE_THRESHOLD || arm_irs[1] > ARMS_OBSTACLE_THRESHOLD) {
+	    	// HANDS.open(); // TODO: Still need to add ARMS class
+	    	setState(APPROACH); //If the ARMS cannot open, what do we do?
+	    }
     	return;
     }
 
     // Set motors so as to move in bottle direction
- 	motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
-	motor_right += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );;
+ 	_motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
+	_motor_right += (int) ( _mean_speed/100.0*-(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*-(bottom_irs[2] - top_irs[1]) );
 
 	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
-	Wire.write(motor_left); // sent data
-	Wire.write(motor_right); // sent data
+	Wire.write(_motor_left); // sent data
+	Wire.write(_motor_right); // sent data
 	Wire.endTransmission(); // end transaction - i2c free again.
 	return;
 }
@@ -167,10 +178,27 @@ void Robot::avoid() {
 }
 
 void Robot::approach() {
-	// Check side IR's to see if we can open ARMS and accept the bottle
-	int arm_irs[2] = {_ir_objects[ID_SIDE_LEFT_ARMS]->getDistance(),
-    	_ir_objects[ID_SIDE_RIGHT_ARMS]->getDistance()}; 
 
+	// Read internal IR's
+    int in_irs[3] = {_ir_objects[ID_IN_LEFT]->getDistance(),
+    	_ir_objects[ID_IN_MID]->getDistance(),
+    	_ir_objects[ID_IN_RIGHT]->getDistance()};
+
+    if (in_irs[0] > BOTTLE_GRAB_DISTANCE && in_irs[1] > BOTTLE_GRAB_DISTANCE && in_irs[2] > BOTTLE_GRAB_DISTANCE) {
+    	avg_in_dist = (in_irs[0] + in_irs[1] + in_irs[2])/3;
+ 	 	_motor_left += (int) ();
+		_motor_right += (int) ();
+
+    } else {
+    	_motor_left = 0;
+    	_motor_right = 0;
+    	setState(GRAB);
+    }
+
+	Wire.beginTransmission(wildthumper_address); // alert device that something is coming: stop the motors
+	Wire.write(_motor_left); // sent data
+	Wire.write(_motor_right); // sent data
+	Wire.endTransmission(); // end transaction - i2c free again.
 
 	Serial.println("Approaching!!!");
 	return;
