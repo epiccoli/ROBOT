@@ -18,10 +18,11 @@ enum STATE
 #define TIMER_MAX  9	*60*1000 // in milliseconds
 #define BOTTLE_MAX  5
 
-// Robot mean speed
-#define MEAN_SPEED 5
+// Robot motor speeds definitions
+#define MAX_MOTOR_SPEED 15
+#define MEAN_MOTOR_SPEED 5
 
-
+// IR sensor threshold distances
 #define SIDE_DIST_THRESHOLD 10
 #define TOP_OBSTACLE_THRESHOLD 80
 #define BOTTLE_FOCUS_DISTANCE 30
