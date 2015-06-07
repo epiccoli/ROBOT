@@ -11,8 +11,6 @@
 #include "Communications.h"
 #include "Motor.h"
 
-
-
 class Robot
 {
 

@@ -184,10 +184,15 @@ void Robot::approach() {
     	_ir_objects[ID_IN_MID]->getDistance(),
     	_ir_objects[ID_IN_RIGHT]->getDistance()};
 
+    // If IR readings are greater than the min grab distance
     if (in_irs[0] > BOTTLE_GRAB_DISTANCE && in_irs[1] > BOTTLE_GRAB_DISTANCE && in_irs[2] > BOTTLE_GRAB_DISTANCE) {
-    	avg_in_dist = (in_irs[0] + in_irs[1] + in_irs[2])/3;
- 	 	_motor_left += (int) ();
-		_motor_right += (int) ();
+    	
+    	// Get the shortest of the three mid IR distances
+    	int min_in_dist = min(in_irs[0], in_irs[1]);
+    	min_in_dist = min(min_in_dist, in_irs[2]);
+
+ 	 	_motor_left = min(MAX_MOTOR_SPEED, (int) MAX_MOTOR_SPEED/60.0*(min_in_dist - BOTTLE_GRAB_DISTANCE));
+		_motor_right = min(MAX_MOTOR_SPEED, (int) MAX_MOTOR_SPEED/60.0*(min_in_dist - BOTTLE_GRAB_DISTANCE));
 
     } else {
     	_motor_left = 0;
