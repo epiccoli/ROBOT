@@ -11,10 +11,8 @@ int8_t PosL2 = 0;
 int8_t PosR1 = 0;
 int8_t PosR2 = 0;
 
-int8_t PosL1test = 0;
-int8_t PosR1test = 0;
-int8_t PosL2test = 0;
-int8_t PosR2test = 0;
+int8_t PosL1_test = 0;
+int8_t PosL2_test = 0;
 
 int8_t OldEL = 0;
 int8_t EL;
@@ -24,18 +22,21 @@ int8_t ER;
 int left_speed = 0;
 int right_speed = 0;
 
-// for debugging
-int global_speed = 255;
-long counter;
-
 // Controller
-int PosL_target = 10;
-int PosR_target = 10;
+// forward:
+//int PosL_target = -30;
+//int PosR_target = 30;
+// turn left:
+//int PosL_target = 15;
+//int PosR_target = 15;
+// turn right:
+//int PosL_target = -15;
+//int PosR_target = -15;
 
+int PosL_target = 0;
+int PosR_target = 0;
 
 void EncoderSetup() {
-
-  counter = 0;
 
   //--------------------Timer---------------------//
   cli();
@@ -114,45 +115,41 @@ ISR ( PCINT0_vect ) {
 ISR( TIMER1_COMPA_vect ) {
 
   EL = PosL_target - 0.5 * (PosL1 + PosL2);
-  ER = -PosR_target - 0.5 * (PosR1 + PosR2);
-
-  PosL1test = PosL1;
-  PosL2test = PosL2;
-  PosR1test = PosR1;
-  PosR2test = PosR2;
+  ER = PosR_target - 0.5 * (PosR1 + PosR2);
+    
+  PosL1_test = PosL1;
+  PosL2_test = PosL2;
+    
 
   PosL1 = 0;
   PosL2 = 0;
   PosR1 = 0;
   PosR2 = 0;
+    
+    
 
   sei();
 
   if ((left_speed + K1 * EL + K2 * OldEL) <= 0) {
     left_speed = max(left_speed + K1 * EL + K2 * OldEL, -255);
-    //left_speed = global_speed;
   }
   else {
     left_speed = min(left_speed + K1 * EL + K2 * OldEL, 255);
-    //left_speed = global_speed;
   }
 
   if ((right_speed + K1 * ER + K2 * OldER) <= 0) {
     right_speed = max(right_speed + K1 * ER + K2 * OldER, -255);
-    //left_speed = global_speed;
   }
   else {
     right_speed = min(right_speed + K1 * ER + K2 * OldER, 255);
-    //left_speed = global_speed;
   }
 
   OldEL = EL;
   OldER = ER;
     
-  Serial.print(PosL_target);
-  Serial.print(" ");
-  Serial.println(PosR_target);
-    
+  //Serial.print(PosL1_test);
+  //Serial.print(" ");
+  //Serial.println(PosL2_test);
 }
 
 void receiveEvent(int howMany)
@@ -160,16 +157,17 @@ void receiveEvent(int howMany)
   //while (Wire.available()) { // loop through all 
     PosL_target = Wire.read(); // receive a byte as an integer
     if (PosL_target > 127) // these values correspond to negative values.
-      PosL_target = (PosL_target - 256);
-
+      PosL_target = -(PosL_target - 256); // negative target corresponds to going forwards.
+    else
+        PosL_target = -PosL_target;
+    
     PosR_target = Wire.read(); //
     if (PosR_target > 127) // these values correspond to negative values.
       PosR_target = (PosR_target - 256);
-
  // }
 
-  Serial.print(PosR1);
+  Serial.print(PosR_target);
   Serial.print(" ");
-  Serial.println(PosR2);
+  Serial.println(PosL_target);
 }
 
