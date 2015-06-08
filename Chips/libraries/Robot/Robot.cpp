@@ -8,68 +8,69 @@ Robot::Robot() {
 
 	_state = INITIALIZE;
 
-	// _ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
-	// _ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
-	// _ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
-	// _ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
-	// _ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
-	// _ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
 
-	// _ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
-	// _ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
-	// _ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
-	// _ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
-	// _ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
-	// _ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
+	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
+	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
+	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
+	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
+	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
+	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
 
-	// _ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
-	// _ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
-	// _ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
-	// _ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
-	// _ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
+	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
+	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
+	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
+	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
+	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
+	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
 
-	// memset(_ir_values,0,17);
+	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
+	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
+	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
+	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
+	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
 
-	// _mean_speed = 10;
+	memset(_ir_values,0,17);
 
-	// _motor_left = 0;
-	// _motor_right = 0;
+	_mean_speed = 10;
 
-	// _arms = new Arms();
+	_motor_left = 0;
+	_motor_right = 0;
+
+	_arms = new Arms();
 
 }
 
-void Robot::run(){
-    Bluetooth.process();
+// void Robot::run(){
+//     Bluetooth.process();
     
-    // run the robot in autonomous mode:
-    if(Bluetooth.buttonIsOn(2)) {
-        executeState();
-    }
-    // run the robot in demo mode:
-    else {
-        Bluetooth.send("Demo Mode");
-        if (Bluetooth.buttonIsOn(3)) {
-            stopMotors();
-        }
-        else {
-            setSpeeds(Bluetooth.getSpeedLeft(),Bluetooth.getSpeedRight());
+//     // run the robot in autonomous mode:
+//     if(Bluetooth.buttonIsOn(2)) {
+//         executeState();
+//     }
+//     // run the robot in demo mode:
+//     else {
+//         Bluetooth.send("Demo Mode");
+//         if (Bluetooth.buttonIsOn(3)) {
+//             stopMotors();
+//         }
+//         else {
+//             setSpeeds(Bluetooth.getSpeedLeft(),Bluetooth.getSpeedRight());
 
-        }
+//         }
         
-        if (Bluetooth.buttonIsOn(4)) {
-            grab();
-        }
-        else if (Bluetooth.buttonIsOn(5)) {
-            search();
-        }
-        else if (Bluetooth.buttonIsOn(6)) {
-            search();
-        }
-    }
+//         if (Bluetooth.buttonIsOn(4)) {
+//             grab();
+//         }
+//         else if (Bluetooth.buttonIsOn(5)) {
+//             search();
+//         }
+//         else if (Bluetooth.buttonIsOn(6)) {
+//             search();
+//         }
+//     }
 
 
-}
+// }
 
 
 void Robot::executeState() {

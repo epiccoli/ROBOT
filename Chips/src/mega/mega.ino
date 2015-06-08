@@ -9,7 +9,7 @@
 #include "Communications.h"
 #include <Arms.h>
 #include <DynamixelSerial.h>
-#include "BluetoothController.h"
+//#include "BluetoothController.h"
 
 
 
@@ -24,10 +24,11 @@ void setup()
   
   Wire.begin();
    
-  Serial.begin(BRATE); //Serial1.begin(9600);
+//  Serial.begin(9600); 
+//  Serial.begin(BRATE); //Serial1.begin(9600);
 //  Spazzino.setState(SEARCH);
   
-  delay(5000);
+  delay(50);
   Serial.println("Start...");
 
 }
