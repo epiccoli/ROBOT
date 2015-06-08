@@ -11,32 +11,28 @@
 #include "Communications.h"
 #include <Arms.h>
 #include <DynamixelSerial.h>
-//#include "BluetoothController.h"
+#include "BluetoothController.h"
 
 Robot Spazzino;
 
 void setup()
 { 
-  delay(200);
+  delay(100);
   
-  Wire.begin();
-<<<<<<< HEAD
-  Serial.begin(BRATE); 
-=======
-   
-//  Serial.begin(9600); 
-//  Serial.begin(BRATE); //Serial1.begin(9600);
-//  Spazzino.setState(SEARCH);
->>>>>>> a2282cc24b4b21f3899a54f55b9e58bf7672126c
-  
-  delay(50);
-  Serial.println("Start...");
+  //Serial.begin(BRATE); 
+  Serial.begin(9600);
+ // Wire.begin();
+
+  Serial.print("Start");
   // Activate interrupts for bumpers
   SetupBumpers();
 }
 
 void loop()
 {
+  //Serial.print("Loop");
+  //delay(100);
+  Serial.print("BIDON");
   Spazzino.executeState();
 }
 

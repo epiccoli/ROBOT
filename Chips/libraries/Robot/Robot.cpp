@@ -74,7 +74,7 @@ Robot::Robot() {
 
 
 void Robot::executeState() {
-
+    
 	switch (_state) {
 
 		case INITIALIZE:
@@ -92,12 +92,18 @@ void Robot::executeState() {
 		case GRAB: 
 			grab();
 			break;
+        case GO_HOME:
+            goHome();
+            break;
 		case DROPOFF:
 			dropoff();
 			break;
 		case DROPOFF_AVOID:
 			dropoffAvoid();
 			break;
+        default:
+            search();
+            break;
 	}
 }
 
@@ -273,7 +279,7 @@ void Robot::approach() {
 
 	setSpeeds(_motor_left,_motor_right);
     
-	Serial.println("Approaching!!!");
+	Serial.println("Approaching");
 	return;
 }
 
@@ -283,11 +289,11 @@ void Robot::grab() {
 	int in_irs[3] = {_ir_objects[ID_IN_LEFT]->getDistance(),
     	_ir_objects[ID_IN_MID]->getDistance(),
     	_ir_objects[ID_IN_RIGHT]->getDistance()};
-
+    
 	//check if bottle within a distance of 2*BOTTLE_GRAB_DISTANCE
 	if (in_irs[0] < 2*BOTTLE_GRAB_DISTANCE || in_irs[1] < 2*BOTTLE_GRAB_DISTANCE || in_irs[2] < 2*BOTTLE_GRAB_DISTANCE) {
 		_arms->grab(); // TODO: Maybe we need to check the bool to see if it worked?
-		Serial.println("Grabbing!!!");
+		//Serial.println("Grabbing!!!");
 		delay(1000);
 		_arms->open(); // TODO: Maybe we need to check the bool to see if it worked?
 		return;
@@ -341,6 +347,10 @@ void Robot::dropoffAvoid() {
 
 
 // }
+void Robot::goHome() {
+	Dynamixel.moveSpeed(DOOR_ID,DOOR_OPEN_POS,DOOR_VEL);
+}
+
 
 bool Robot::openDoor() {
 	Dynamixel.moveSpeed(DOOR_ID,DOOR_OPEN_POS,DOOR_VEL);
