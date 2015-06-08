@@ -19,6 +19,8 @@ void setup()
 { 
   delay(100);
   
+  
+  initBluetooth();
   Serial.begin(BRATE); 
   Wire.begin();
 
@@ -79,4 +81,8 @@ ISR ( bumpKvect ) {
     Spazzino.setState(AVOID);
 }
 
+void initBluetooth() {
+  Serial2.begin(115200);
+  while(Serial2.available())  Serial2.read();// empty RX buffer
+}
 

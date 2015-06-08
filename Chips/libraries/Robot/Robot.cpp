@@ -6,81 +6,115 @@
 
 Robot::Robot() {
 
-	_state = INITIALIZE;
+	_state = SEARCH;
 
+    // Create and initialze all IR sensors
+	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
+	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
+	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
+	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
+	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
+	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
+    
+	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
+	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
+	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
+	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
+	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
+	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
+    
+	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
+	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
+	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
+	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
+	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
+    
+	memset(_ir_values,0,17);
+    
+	_motor_left = 0;
+	_motor_right = 0;
+    
+    _bumper_hit = 0;
+    
+	_arms = new Arms();
+	_current_nb_bottle = 0;
 
-//	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
-//	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
-//	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
-//	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
-//	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
-//	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
-//
-//	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
-//	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
-//	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
-//	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
-//	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
-//	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
-//
-//	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
-//	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
-//	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
-//	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
-//	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
-//
-//	memset(_ir_values,0,17);
-//
-//	_mean_speed = 10;
-//
-//	_motor_left = 0;
-//	_motor_right = 0;
-//
-//	_arms = new Arms();
 
 }
 
 void Robot::run(){
      Bluetooth.process();
     
-//     // run the robot in autonomous mode:
-//     if(Bluetooth.buttonIsOn(2)) {
-//         executeState();
-//     }
-//     // run the robot in demo mode:
-//     else {
-//         Bluetooth.send("Demo Mode");
-//         if (Bluetooth.buttonIsOn(3)) {
-//             stopMotors();
-//         }
-//         else {
-//             setSpeeds(Bluetooth.getSpeedLeft(),Bluetooth.getSpeedRight());
-
-//         }
+    //run the robot in autonomous mode:
+     if(Bluetooth.buttonIsOn(1)) {
+         if (Bluetooth.buttonIsOn(2)) {
+             stopMotors();
+             return;
+         } else if (Bluetooth.buttonIsOn(3)) {
+             search();
+             return;
+         } else if (Bluetooth.buttonIsOn(4)) {
+             grab();
+             return;
+         } else if (Bluetooth.buttonIsOn(5)) {
+             //stop arms
+             return;
+         } else if (Bluetooth.buttonIsOn(6)) {
+             goHome();
+             return;
+         }
+         executeState();
+         return;
+     }
+     // run the robot in demo mode:
+     else {
+         Bluetooth.send("Demo Mode");
+         if (Bluetooth.buttonIsOn(2)) {
+             stopMotors();
+             Serial.println("Button 3 pressed");
+         }
+         else {
+             
+             //Serial.println("Joystick active");
+             setSpeeds((int) (Bluetooth.getSpeedLeft()/10.0),(int) (Bluetooth.getSpeedRight()/10.0));
+             
+//             Serial.print(Bluetooth.getSpeed());
+//             Serial.print(" ");
+//             Serial.println(Bluetooth.getSteer());
+//            if (_motor_left!=0 | _motor_right!=0){
+//                Serial.println(_motor_left);
+//                Serial.println(_motor_right);
+//            }
+         }
         
-//         if (Bluetooth.buttonIsOn(4)) {
-//             grab();
-//         }
-//         else if (Bluetooth.buttonIsOn(5)) {
-//             search();
-//         }
-//         else if (Bluetooth.buttonIsOn(6)) {
-//             search();
-//         }
-//     }
-
-
-// }
+         if (Bluetooth.buttonIsOn(3)) {
+             _arms->open();
+             Bluetooth.send("Open Arms");
+         }
+         else if (Bluetooth.buttonIsOn(4)) {
+             _arms->grab();
+             Bluetooth.send("Grab Bottle");
+         }
+         else if (Bluetooth.buttonIsOn(5)) {
+             _arms->fold();
+             Bluetooth.send("Fold Arms");
+         }
+         else if (Bluetooth.buttonIsOn(6)) {
+             openDoor();
+             Serial.println("Open Door");
+         }
+     }
+}
 
 
 void Robot::executeState() {
     
 	switch (_state) {
 
-		case INITIALIZE:
-			initialize();
-			break;
-		case SEARCH: 
+//		case INITIALIZE:
+//			initialize();
+//			break;
+		case SEARCH:
 			search();
 			break;
 		case AVOID:
@@ -135,48 +169,19 @@ int Robot::getBumperHit() {
 
 //State functions
 
-void Robot::initialize() {
-
-	// Create and initialze all IR sensors
-	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
-	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
-	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
-	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
-	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
-	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
-
-	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
-	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
-	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
-	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
-	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
-	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
-
-	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
-	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
-	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
-	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
-	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
-
-	memset(_ir_values,0,17);
-
-	_motor_left = 0;
-	_motor_right = 0;
-    
-    _bumper_hit = 0;
-
-	_arms = new Arms();
-	_current_nb_bottle = 0;
-
-	// for(int i=0; i<17; i++){
-	// 	_ir_objects[i]->printSpecs();
-	// }	
-
-	//TODO: calibration stuff
-
-	_state = SEARCH;
-	return;
-}
+//void Robot::initialize() {
+//
+//
+//
+//	// for(int i=0; i<17; i++){
+//	// 	_ir_objects[i]->printSpecs();
+//	// }	
+//
+//	//TODO: calibration stuff
+//
+//	_state = SEARCH;
+//	return;
+//}
 
 void Robot::search() {
     _motor_left =  MEAN_MOTOR_SPEED;
