@@ -14,6 +14,9 @@ void SetupBumpers() {
     pinMode(ground2,OUTPUT);
     digitalWrite(ground1,LOW);
     digitalWrite(ground2,LOW);
+    
+    pinMode(bumpB1,OUTPUT);
+    digitalWrite(bumpB1,HIGH);
     //DDRL |= ground; // set ground pins to output
     //PORTL &=~ ground; // set ground pins to zero.
     

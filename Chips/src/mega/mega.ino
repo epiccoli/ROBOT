@@ -32,7 +32,7 @@ void loop()
 {
   //Serial.print("Loop");
   //delay(100);
-  Serial.print("BIDON");
+  //Serial.print("BIDON");
   Spazzino.executeState();
 }
 
