@@ -9,34 +9,34 @@ Robot::Robot() {
 	_state = INITIALIZE;
 
 
-	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
-	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
-	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
-	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
-	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
-	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
-
-	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
-	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
-	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
-	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
-	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
-	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
-
-	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
-	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
-	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
-	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
-	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
-
-	memset(_ir_values,0,17);
-
-	_mean_speed = 10;
-
-	_motor_left = 0;
-	_motor_right = 0;
-
-	_arms = new Arms();
+//	_ir_objects[ID_FRONT_BOT_LEFT_OUT] = new IR(IR_FRONT_BOT_LEFT_OUT);
+//	_ir_objects[ID_FRONT_BOT_LEFT_IN] = new IR(IR_FRONT_BOT_LEFT_IN);
+//	_ir_objects[ID_FRONT_TOP_LEFT_OUT] = new IR(IR_FRONT_TOP_LEFT_OUT);
+//	_ir_objects[ID_FRONT_TOP_LEFT_IN] = new IR(IR_FRONT_TOP_LEFT_IN);
+//	_ir_objects[ID_SIDE_LEFT_FRONT] = new IR(IR_SIDE_LEFT_FRONT);
+//	_ir_objects[ID_SIDE_LEFT_ARMS] = new IR(IR_SIDE_LEFT_ARMS);
+//
+//	_ir_objects[ID_FRONT_BOT_RIGHT_OUT] = new IR(IR_FRONT_BOT_RIGHT_OUT);
+//	_ir_objects[ID_FRONT_BOT_RIGHT_IN] = new IR(IR_FRONT_BOT_RIGHT_IN);
+//	_ir_objects[ID_FRONT_TOP_RIGHT_OUT] = new IR(IR_FRONT_TOP_RIGHT_OUT);
+//	_ir_objects[ID_FRONT_TOP_RIGHT_IN] = new IR(IR_FRONT_TOP_RIGHT_IN);
+//	_ir_objects[ID_SIDE_RIGHT_FRONT] = new IR(IR_SIDE_RIGHT_FRONT);
+//	_ir_objects[ID_SIDE_RIGHT_ARMS] = new IR(IR_SIDE_RIGHT_ARMS);
+//
+//	_ir_objects[ID_SIDE_LEFT_BACK] = new IR(IR_SIDE_LEFT_BACK);
+//	_ir_objects[ID_IN_LEFT] = new IR(IR_IN_LEFT);
+//	_ir_objects[ID_IN_MID] = new IR(IR_IN_MID);
+//	_ir_objects[ID_IN_RIGHT] = new IR(IR_IN_RIGHT);
+//	_ir_objects[ID_SIDE_RIGHT_BACK] = new IR(IR_SIDE_RIGHT_BACK);
+//
+//	memset(_ir_values,0,17);
+//
+//	_mean_speed = 10;
+//
+//	_motor_left = 0;
+//	_motor_right = 0;
+//
+//	_arms = new Arms();
 
 }
 
@@ -151,7 +151,7 @@ void Robot::initialize() {
 
 	memset(_ir_values,0,17);
 
-	_mean_speed = 10;
+	_mean_speed = 20;
 
 	_motor_left = 0;
 	_motor_right = 0;
@@ -172,9 +172,16 @@ void Robot::initialize() {
 void Robot::search() {
     _motor_left =  _mean_speed;
     _motor_right = _mean_speed;
+    
+    Serial.print(_motor_left);
+    Serial.print(", ");
+    Serial.println(_motor_right);
 
     setSpeeds(_motor_left,_motor_right);
     delay(10);
+    
+    Serial.println(_state);
+    return;
     /*
     //check if the robot is to close to any obstacles on its sides: if yes, stop motors and enter state AVOID
     if (_ir_objects[ID_SIDE_LEFT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD || 
@@ -251,6 +258,8 @@ void Robot::search() {
 void Robot::avoid() {
     stopMotors();
 	//TODO: write the avoid function
+    delay(1000);
+    _state = SEARCH;
 }
 
 void Robot::approach() {

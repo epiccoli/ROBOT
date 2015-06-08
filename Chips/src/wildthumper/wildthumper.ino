@@ -16,7 +16,7 @@ int test_speed = 70;
 void setup() {
   Wire.begin(WILDTHUMPER_ADDRESS); // join i2c bus with address wildthumper_address
   Wire.onReceive(receiveEvent); // function that executes whenever data is received from master
-  Serial.begin(Brate);
+  Serial.begin(BRATE);
 
   WildThumper_board.init();
   MotorLeft.init(LmotorA, LmotorB, LmotorC);

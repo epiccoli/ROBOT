@@ -19,9 +19,9 @@ void setup()
 { 
   delay(100);
   
-  //Serial.begin(BRATE); 
-  Serial.begin(9600);
- // Wire.begin();
+  Serial.begin(BRATE); 
+  //Serial.begin(9600);
+  Wire.begin();
 
   Serial.print("Start");
   // Activate interrupts for bumpers
@@ -34,6 +34,7 @@ void loop()
   //delay(100);
   //Serial.print("BIDON");
   Spazzino.executeState();
+  delay(10);
 }
 
 
