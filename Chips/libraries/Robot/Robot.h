@@ -11,7 +11,7 @@
 #include "Communications.h"
 #include "Motor.h"
 #include "Arms.h"
-#include "BluetoothController.h"
+// #include "BluetoothController.h"
 
 class Robot
 {
@@ -21,7 +21,7 @@ public:
 	// ~Robot();
 
 	void executeState();
-    void run();
+    // void run();
 	// //void changeState(unsigned int NEW_STATE);
 	// void setState(STATE new_state);
 	// STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
