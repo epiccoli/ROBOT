@@ -19,8 +19,15 @@ enum STATE
 #define BOTTLE_MAX  5
 
 // Robot motor speeds definitions
-#define MAX_MOTOR_SPEED 15
-#define MEAN_MOTOR_SPEED 5
+#define MAX_MOTOR_SPEED 25
+#define MEAN_MOTOR_SPEED 15
+#define DELTA_AVOID 10
+
+// AVOID TIMES
+#define MOTOR_STOP 1000
+#define MOTOR_BACK 3000
+#define MOTOR_TURN 2000
+
 
 // IR sensor threshold distances
 #define SIDE_DIST_THRESHOLD 10

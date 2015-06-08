@@ -40,8 +40,8 @@ Robot::Robot() {
 
 }
 
-// void Robot::run(){
-//     Bluetooth.process();
+void Robot::run(){
+     Bluetooth.process();
     
 //     // run the robot in autonomous mode:
 //     if(Bluetooth.buttonIsOn(2)) {
@@ -121,7 +121,16 @@ STATE Robot::getState()  {
 
 }
 
-  
+void Robot::setBumperHit(int which_bumper) {
+    _bumper_hit = which_bumper;
+    return;
+}
+
+int Robot::getBumperHit() {
+    return _bumper_hit;
+}
+
+
 
 
 //State functions
@@ -151,10 +160,10 @@ void Robot::initialize() {
 
 	memset(_ir_values,0,17);
 
-	_mean_speed = 20;
-
 	_motor_left = 0;
 	_motor_right = 0;
+    
+    _bumper_hit = 0;
 
 	_arms = new Arms();
 	_current_nb_bottle = 0;
@@ -170,8 +179,8 @@ void Robot::initialize() {
 }
 
 void Robot::search() {
-    _motor_left =  _mean_speed;
-    _motor_right = _mean_speed;
+    _motor_left =  MEAN_MOTOR_SPEED;
+    _motor_right = MEAN_MOTOR_SPEED;
     
     Serial.print(_motor_left);
     Serial.print(", ");
@@ -258,10 +267,23 @@ void Robot::search() {
 void Robot::avoid() {
     stopMotors();
 	//TODO: write the avoid function
-    delay(1000);
+    delay(MOTOR_STOP);
+    // do the reverse movement from before
     setSpeeds(-_motor_left,-_motor_right);
-    delay(3000);
+    delay(MOTOR_BACK);
+    // turn a little bit
+    setSpeeds(-_motor_left,-_motor_right - DELTA_AVOID);
+    delay(MOTOR_TURN);
+    // continue
     _state = SEARCH;
+    return;
+    
+    /*
+    if (_bumper_hit == 1) {
+        <#statements#>
+    }
+    _bumper_hit = 0;
+     */
 }
 
 void Robot::approach() {

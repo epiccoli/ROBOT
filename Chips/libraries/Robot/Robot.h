@@ -25,6 +25,9 @@ public:
 	// //void changeState(unsigned int NEW_STATE);
 	void setState(STATE new_state);
 	STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
+    
+    void setBumperHit(int which_bumper);
+    int getBumperHit();
 
 private:
 	STATE _state;
@@ -40,6 +43,8 @@ private:
 
 	int _motor_left;
 	int _motor_right;
+    
+    int _bumper_hit; // 0 = none, 1 = front, 2 = back, 3 = right, 4 = left
 
 	// State functions
 	void initialize();
