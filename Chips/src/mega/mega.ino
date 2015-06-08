@@ -1,9 +1,11 @@
 #include <Arduino.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 #include <Robot.h>
 #include <Motor.h>
 #include <MUX.h>
 #include <IR.h>
-#include <mega_bumpers.h>
+#include "Bumpers.h"
 #include <mega_constants.h>
 #include <Wire.h>
 #include "Communications.h"
@@ -11,32 +13,24 @@
 #include <DynamixelSerial.h>
 #include "BluetoothController.h"
 
-
-
 Robot Spazzino;
 
 void setup()
 { 
   delay(200);
-  Serial.begin(9600); 
-//  Serial.println("Hello");
-//  Spazzino.executeState();
   
   Wire.begin();
-   
-  Serial.begin(BRATE); //Serial1.begin(9600);
-//  Spazzino.setState(SEARCH);
+  Serial.begin(BRATE); 
   
   delay(5000);
   Serial.println("Start...");
-
+  // Activate interrupts for bumpers
+  SetupBumpers();
 }
 
 void loop()
 {
   Spazzino.executeState();
-
-//  delay(200000);
 }
 
 
