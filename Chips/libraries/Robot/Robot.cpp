@@ -259,6 +259,8 @@ void Robot::avoid() {
     stopMotors();
 	//TODO: write the avoid function
     delay(1000);
+    setSpeeds(-_motor_left,-_motor_right);
+    delay(3000);
     _state = SEARCH;
 }
 
