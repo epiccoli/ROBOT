@@ -34,12 +34,12 @@
 #define bumpB1 INT4 // Front_Left
 #define bumpB2 INT5 // Front_Right
 
-#define bumpC1 PCINT0 // Back_Rigt
-#define bumpC2 PCINT1 // Back_Left
-#define bumpC3 PCINT2 // Right_Front
-#define bumpC4 PCINT3 // Left_Front
-#define bumpC5 PCINT4 // Left_Back
-#define bumpC6 PCINT5 // Right_Back
+#define bumpC1 PCINT0 // Left_back
+#define bumpC2 PCINT1 // Right_Front
+#define bumpC3 PCINT2 // Left_Front
+#define bumpC4 PCINT3 // Back_Left
+#define bumpC5 PCINT4 // Right_Back
+#define bumpC6 PCINT5 // Back_Right
 
 // ground pins
 #define ground1 48

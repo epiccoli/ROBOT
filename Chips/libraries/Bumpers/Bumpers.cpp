@@ -81,15 +81,15 @@ ISR ( bumpCvect ) {
     // to know which bumpers are activated
     //Serial.println("Pin Change Interrupt");
     if (~(bumpCIN) & (1 << bumpC1))
-        Serial.println("Bumper Back_Right triggered");
-    if (~(bumpCIN) & (1 << bumpC2))
-        Serial.println("Bumper Back_Left triggered");
-    if (~(bumpCIN) & (1 << bumpC3))
-        Serial.println("Bumper Right_Front triggered");
-    if (~(bumpCIN) & (1 << bumpC4))
-        Serial.println("Bumper Left_Front triggered");
-    if (~(bumpCIN) & (1 << bumpC5))
         Serial.println("Bumper Left_Back triggered");
-    if (~(bumpCIN) & (1 << bumpC6))
+    if (~(bumpCIN) & (1 << bumpC2))
+        Serial.println("Bumper Right_Front triggered");
+    if (~(bumpCIN) & (1 << bumpC3))
+        Serial.println("Bumper Left_Front triggered");
+    if (~(bumpCIN) & (1 << bumpC4))
+        Serial.println("Bumper Back_Left triggered");
+    if (~(bumpCIN) & (1 << bumpC5))
         Serial.println("Bumper Right_Back triggered");
+    if (~(bumpCIN) & (1 << bumpC6))
+        Serial.println("Bumper Back_Right triggered");
 }
