@@ -29,10 +29,10 @@ D12             PB4        PCINT4/MISO
 */
 
 /* Motors
-L1        11
-L2        12
-R1        13
-R2        10
+R1        11   D8    D0
+R2        12   D9    D7
+L1        13   D10   D2
+L2        10   D12   D4
 */
 
 // Variables for encoder
@@ -41,15 +41,15 @@ R2        10
 #define EncA_DDR DDRB // data direction register of encoder A
 #define EncB_DDR DDRD // data direction register of encoder B 
 
-#define EncL1A PCINT0 // D8 input pin of encoder A of motor L1
-#define EncL2A PCINT1 // D9 input pin of encoder A of motor L2
-#define EncR1A PCINT2 // D10 input pin of encoder A of motor R1
-#define EncR2A PCINT4 // D12 input pin of encoder A of motor R2
+#define EncR1A PCINT0 // D8 input pin of encoder A of motor R1
+#define EncR2A PCINT1 // D9 input pin of encoder A of motor R2
+#define EncL1A PCINT2 // D10 input pin of encoder A of motor L1
+#define EncL2A PCINT4 // D12 input pin of encoder A of motor L2
 
-#define EncL1B PIND0 // D0 input pin of encoder B of motor L1
-#define EncL2B PIND7 // D7 input pin of encoder B of motor L2
-#define EncR1B PIND2 // D2 input pin of encoder B of motor R1
-#define EncR2B PIND4 // D4 input pin of encoder B of motor R2
+#define EncR1B PIND0 // D0 input pin of encoder B of motor R1
+#define EncR2B PIND7 // D7 input pin of encoder B of motor R2
+#define EncL1B PIND2 // D2 input pin of encoder B of motor L1
+#define EncL2B PIND4 // D4 input pin of encoder B of motor L2
 
 typedef enum{LEFT, RIGHT} side;
 

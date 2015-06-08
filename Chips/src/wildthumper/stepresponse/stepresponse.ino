@@ -11,7 +11,8 @@
 WildThumper WildThumper_board;
 Motor MotorLeft;
 Motor MotorRight;
-int test_speed = 70;
+int test_speed = -150;
+int time_counter = 0;
 
 void setup() {
   Wire.begin(WILDTHUMPER_ADDRESS); // join i2c bus with address wildthumper_address
@@ -23,31 +24,26 @@ void setup() {
   MotorRight.init(RmotorA, RmotorB, RmotorC);
 
   EncoderSetup();
-
-  Serial.println(WildThumper_board.battery());
-
-  pinMode(A3, INPUT_PULLUP);
-
+  delay(5000);
+  
 }
 void loop() {
   //Serial.println("New loop");
+  MotorLeft.set_speed(-getSpeed(LEFT));
+  MotorRight.set_speed(getSpeed(RIGHT));
 
   WildThumper_board.control_state();          //Control battery and maxcurrent
 
   MotorLeft.lastoverloadtime = WildThumper_board.leftoverload;
   MotorRight.lastoverloadtime = WildThumper_board.rightoverload;
-
-  if (1) { //WildThumper_board.Charged == 1){                   // Only power motors if battery voltage is good
-
-    //if(!digitalRead(A3)) {
-    MotorLeft.set_speed(-getSpeed(LEFT));
-    MotorRight.set_speed(getSpeed(RIGHT));
+  if(time_counter < 10000) {
+  time_counter++;
   }
-  else {
+  else{
     MotorLeft.turn_off();
     MotorRight.turn_off();
+    delay(6000);
   }
-
 }
 
 

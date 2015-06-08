@@ -166,6 +166,11 @@ void Robot::search() {
     _motor_left =  _mean_speed;
     _motor_right = _mean_speed;
 
+    setSpeeds(_motor_left,_motor_right);
+    delay(1000);
+    setSpeeds(-_motor_left,-_motor_right);
+    delay(1000);
+    /*
     //check if the robot is to close to any obstacles on its sides: if yes, stop motors and enter state AVOID
     if (_ir_objects[ID_SIDE_LEFT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD || 
     	_ir_objects[ID_SIDE_LEFT_BACK]->getDistance() < SIDE_DIST_THRESHOLD || 
@@ -235,6 +240,7 @@ void Robot::search() {
 	Wire.write(_motor_right); // sent data
 	Wire.endTransmission(); // end transaction - i2c free again.
 	return;
+     */
 }
 
 void Robot::avoid() {
