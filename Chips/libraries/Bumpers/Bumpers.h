@@ -73,6 +73,7 @@
 #define bumpCPORT PORTB
 
 // Define interrupt vectors for bumpers
+
 // Front bumpers_old
 //#define bumpB1vect INT4_vect
 //#define bumpB2vect INT5_vect

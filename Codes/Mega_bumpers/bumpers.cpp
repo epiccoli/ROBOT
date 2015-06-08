@@ -62,14 +62,14 @@ void SetupBumpers() {
 // -------------------------------------------------------
 // External interrupt subroutines
 // -------------------------------------------------------
-
+/*
 ISR (bumpB1vect) {
   Serial.println("Bumper Front_Left triggered");
 }
 
 ISR (bumpB2vect) {
   Serial.println("Bumper Front_Right triggered");
-}
+}*/
 
 // -------------------------------------------------------
 // Pin change interrupt subroutines
