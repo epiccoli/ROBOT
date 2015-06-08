@@ -23,8 +23,8 @@ public:
 	void executeState();
     // void run();
 	// //void changeState(unsigned int NEW_STATE);
-	// void setState(STATE new_state);
-	// STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
+	void setState(STATE new_state);
+	STATE getState(); // if we first define const unsigned int SEARCH = 0; etc
 
 private:
 	STATE _state;

@@ -108,18 +108,18 @@ void Robot::executeState() {
 }
 
 
-// These lines were useless
-// void Robot::setState(STATE new_state) {
 
-// 	_state = new_state;
-// 	return;
-// }
+void Robot::setState(STATE new_state) {
 
-// STATE Robot::getState()  {
+ 	_state = new_state;
+ 	return;
+}
 
-// 	 return _state;
+STATE Robot::getState()  {
 
-// }
+ 	 return _state;
+
+}
 
   
 

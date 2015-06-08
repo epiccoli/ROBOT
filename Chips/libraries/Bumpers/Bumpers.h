@@ -81,8 +81,6 @@
 #define bumpCvect PCINT0_vect
 #define bumpKvect PCINT2_vect
 
-
-
 void SetupBumpers();
 
 #endif

@@ -83,7 +83,7 @@ ISR (bumpB2vect) {
 // Pin change interrupt subroutines
 // -------------------------------------------------------
 
-
+/*
 ISR ( bumpKvect ) {
     // Check which pins are 0 - these bumpers are pressed
     // Note that these are not necessarily the pins that
@@ -99,6 +99,7 @@ ISR ( bumpKvect ) {
         Serial.println("Bumper Front_Right triggered");
         bumpKPORT |= (1<<bumpK2);
     }
+    _state=AVOID;
 }
 
 ISR ( bumpCvect ) {
@@ -120,3 +121,4 @@ ISR ( bumpCvect ) {
     if (~(bumpCIN) & (1 << bumpC6))
         Serial.println("Bumper Back_Right triggered");
 }
+ */
