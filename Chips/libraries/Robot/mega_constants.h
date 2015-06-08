@@ -38,8 +38,8 @@ enum STATE
 
 // Door
 #define DOOR_ID 3
-#define DOOR_OPEN_POS 500 // We need to calibrate this
-#define DOOR_CLOSE_POS 0
+#define DOOR_OPEN_POS 450 // We need to calibrate this
+#define DOOR_CLOSE_POS 650
 #define DOOR_VEL 50
 
 
@@ -98,11 +98,11 @@ enum STATE
 #define 	IR_SIDE_RIGHT_FRONT			MUX_R_SIG, MUX_R_S0, MUX_R_S1, MUX_R_S2, MUX_R_S3, C5, SHORT_RANGE, 5
 #define 	IR_SIDE_RIGHT_ARMS			MUX_R_SIG, MUX_R_S0, MUX_R_S1, MUX_R_S2, MUX_R_S3, C6, SHORT_RANGE, 5
 
-#define 	IR_SIDE_LEFT_BACK			A2, SHORT_RANGE, 5
+#define 	IR_SIDE_LEFT_BACK			A6, SHORT_RANGE, 5
 #define 	IR_IN_LEFT					A3, SHORT_RANGE, 5
 #define 	IR_IN_MID					A4, SHORT_RANGE, 5
 #define 	IR_IN_RIGHT					A5, SHORT_RANGE, 5
-#define 	IR_SIDE_RIGHT_BACK			A6, SHORT_RANGE, 5
+#define 	IR_SIDE_RIGHT_BACK			A2, SHORT_RANGE, 5
 
 //Define IR identifiers
 #define 	ID_FRONT_BOT_LEFT_OUT		0

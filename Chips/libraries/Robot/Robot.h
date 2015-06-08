@@ -60,11 +60,14 @@ private:
 	// Other function go here
 	// void braitenberg();
 
+    void initDoor();
 	bool openDoor();
 	bool closeDoor();
     
     void stopMotors();
     void setSpeeds(int motorleft, int motorright);
+    
+    void read_all_IRs();
 
 	void update_all_IRs(bool dist[17]) ;
 	int updateIR(int ir_id, bool dist);
