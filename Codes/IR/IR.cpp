@@ -5,7 +5,9 @@ void setupIR_MUX(){
     pinMode(s0, OUTPUT); 
     pinMode(s1, OUTPUT); 
     pinMode(s2, OUTPUT); 
-    pinMode(s3, OUTPUT); 
+    pinMode(s3, OUTPUT);
+
+    digitalWrite(s0, LOW); 
 
     digitalWrite(s0, LOW);
     digitalWrite(s1, LOW);
