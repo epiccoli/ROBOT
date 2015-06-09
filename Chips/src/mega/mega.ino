@@ -29,6 +29,8 @@ void setup()
 
   // Activate interrupts for bumpers
   SetupBumpers();
+  
+
 }
 
 void loop()

@@ -193,11 +193,12 @@ int IR::getDistance() {
 
         // if(analog_signal <= 33)  
         //     dist = 180;
-        if(analog_signal <= 60)
-            dist = 90;
-        else if(analog_signal <= 63)
-            dist = 85;
-        else if(analog_signal <= 71)
+        // if(analog_signal <= 60)
+        //     dist = 90;
+        // else if(analog_signal <= 63)
+        //     dist = 85;
+        // else 
+        if(analog_signal <= 71)
             dist = 80;
         else if(analog_signal <= 72)
             dist = 79;
@@ -346,19 +347,20 @@ int IR::getDistance() {
     //for ShortRangeModel
     if( m_ir_model == 2){
 
-        if(analog_signal <= 27)
-            dist = 70;
-        else if(analog_signal <= 33)
-            dist = 60;
-        else if(analog_signal <= 40)
-            dist = 50;
-        else if(analog_signal <= 48)
-            dist = 45;
-        else if(analog_signal <= 50)
-            dist = 42;
-        else if(analog_signal <= 52)
-            dist = 41;
-        else if(analog_signal <= 53)
+        // if(analog_signal <= 27)
+        //     dist = 70;
+        // else if(analog_signal <= 33)
+        //     dist = 60;
+        // else if(analog_signal <= 40)
+        //     dist = 50;
+        // else if(analog_signal <= 48)
+        //     dist = 45;
+        // else if(analog_signal <= 50)
+        //     dist = 42;
+        // else if(analog_signal <= 52)
+        //     dist = 41;
+        // else 
+        if(analog_signal <= 53)
             dist = 40;
         else if(analog_signal <= 55)
             dist = 39;
@@ -439,6 +441,7 @@ int IR::getDistance() {
     }
 
     
+    // delay(500);
     return dist;
 
 }
