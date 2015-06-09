@@ -2,7 +2,7 @@
 #define IR_H_INCLUDED
 
 #include <Arduino.h>
-#include "MUX.h"
+// #include "MUX.h"
 
 class IR
 {

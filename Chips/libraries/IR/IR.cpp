@@ -24,7 +24,7 @@ IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int a
 	m_ir_model = ir_model;
 	m_avg = avg;
 
-    Serial.begin(9600);
+    // Serial.begin(9600);
 
     // Setup of associated MUX pins on Arduino
     pinMode(m_sig, INPUT);
@@ -33,6 +33,13 @@ IR::IR(int sig, int s0, int s1, int s2, int s3, int mux_pin, int ir_model, int a
     pinMode(m_s1, OUTPUT); 
     pinMode(m_s2, OUTPUT); 
     pinMode(m_s3, OUTPUT);
+
+    digitalWrite(m_sig, LOW);
+
+    digitalWrite(m_s0, LOW);
+    digitalWrite(m_s1, LOW);
+    digitalWrite(m_s2, LOW);
+    digitalWrite(m_s3, LOW);
 
     // Serial.print("SIG: ");
     // Serial.print(m_sig);
@@ -66,10 +73,11 @@ IR::IR(int analog_pin, int ir_model, int avg){
     m_ir_model = ir_model;
     m_avg = avg;
 
-    Serial.begin(9600);
+    // Serial.begin(9600);
 
     // Setup of pinS on Arduino
     pinMode(m_analog_pin, INPUT);
+    digitalWrite(m_analog_pin, LOW);
 
 
     // Serial.print("SIG: ");
@@ -147,6 +155,7 @@ int IR::readIR(){
 
         // read analog signal directly from arduino analog
         analog_signal = analogRead(m_analog_pin);
+        // Serial.println(analog_signal);
     }
     
     return analog_signal;
@@ -159,11 +168,15 @@ int IR::getAvgAnalog() {
 
     // reads the average analog signal
     for (int i=0; i<m_avg; i++){
+
         
         analog_signal += readIR();
+        // Serial.println(analog_signal);
     }
 
     analog_signal = analog_signal/m_avg;
+
+    return analog_signal;
 
 }
 

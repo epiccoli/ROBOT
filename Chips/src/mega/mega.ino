@@ -17,14 +17,16 @@ Robot Spazzino;
 
 void setup()
 { 
-  delay(100);
+
+  Serial.begin(BRATE); 
+  delay(5000);
+  Serial.print("Start");
   
+
+  Wire.begin();
   
   initBluetooth();
-  Serial.begin(BRATE); 
-  Wire.begin();
 
-  Serial.print("Start");
   // Activate interrupts for bumpers
   SetupBumpers();
 }
