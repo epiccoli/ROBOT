@@ -17,16 +17,16 @@ calibrate the dynamixel
 
 #define ID_ARM_LEFT 7
 
-#define OPEN_POS_LEFT 850
-#define FOLD_POS_LEFT 550
-#define GRAB_POS_LEFT 300
+#define OPEN_POS_LEFT 680
+#define FOLD_POS_LEFT 480
+#define GRAB_POS_LEFT 220
 #define MAX_LEFT 750
 
 #define ID_ARM_RIGHT 1 // it is written 6
 
-#define OPEN_POS_RIGHT 300
+#define OPEN_POS_RIGHT 350
 #define FOLD_POS_RIGHT 570
-#define GRAB_POS_RIGHT 820
+#define GRAB_POS_RIGHT 840
 #define MAX_RIGHT 930
 
 class Arms

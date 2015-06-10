@@ -65,7 +65,7 @@ ISR ( bumpCvect ) {
         Serial.println("Bumper Back_Right triggered");
         Spazzino.setBumperHit(2);
         
-        
+//    Bluetooth.send(Spazzino.getBumperHit());   
     Spazzino.setState(AVOID);
 }
 
@@ -82,6 +82,7 @@ ISR ( bumpKvect ) {
         bumpKPORT |= (1<<bumpK2);
     }
     
+//    Bluetooth.send(Spazzino.getBumperHit());
     Spazzino.setState(AVOID);
 }
 

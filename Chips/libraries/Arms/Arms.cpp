@@ -19,7 +19,7 @@ Arms::Arms(){
 	_openPos_rightArm = OPEN_POS_RIGHT;
 	_grabPos_rightArm = GRAB_POS_RIGHT;
 	
-	_vel = 80;
+	_vel = 160;
 
 	// Dynamixel setup
 	Dynamixel.begin(1000000,2);

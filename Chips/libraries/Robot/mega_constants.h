@@ -19,22 +19,24 @@ enum STATE
 #define BOTTLE_MAX  5
 
 // Robot motor speeds definitions
-#define MAX_MOTOR_SPEED 25
+#define MAX_MOTOR_SPEED 19
 #define MEAN_MOTOR_SPEED 15
-#define DELTA_AVOID 10
+#define DELTA_AVOID 3
 
 // AVOID TIMES
-#define MOTOR_STOP 1000
-#define MOTOR_BACK 3000
-#define MOTOR_TURN 2000
+#define MOTOR_STOP 500
+#define MOTOR_BACK 1500
+#define MOTOR_TURN 1500
 
 
 // IR sensor threshold distances
-#define SIDE_DIST_THRESHOLD 10
-#define TOP_OBSTACLE_THRESHOLD 80
+#define SIDE_DIST_THRESHOLD 30
+#define TOP_OBSTACLE_THRESHOLD 60
 #define BOTTLE_FOCUS_DISTANCE 30
 #define ARMS_OBSTACLE_THRESHOLD 50
 #define BOTTLE_GRAB_DISTANCE 7
+#define TARGET 30
+
 
 // Door
 #define DOOR_ID 3

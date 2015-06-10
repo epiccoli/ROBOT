@@ -41,6 +41,8 @@ Robot::Robot() {
     
     initDoor();
 
+    _arms->fold();
+
 
 }
 
@@ -104,27 +106,27 @@ void Robot::run(){
          }
         
          if (Bluetooth.buttonIsOn(3)) {
-             // // _arms->open();
-             // Bluetooth.send("Open Arms");
+             _arms->open();
+             Bluetooth.send("Open Arms");
              // Serial.println("Open Arms");
          }
          else if (Bluetooth.buttonIsOn(4)) {
-             // _arms->grab();
-             // Bluetooth.send("Grab Bottle");
+             _arms->grab();
+             Bluetooth.send("Grab Bottle");
              // Serial.println("Grab Bottle");
          }
          else if (Bluetooth.buttonIsOn(5)) {
-             // _arms->fold();
-             // Bluetooth.send("Fold Arms");
+             _arms->fold();
+             Bluetooth.send("Fold Arms");
              // Serial.println("Fold Arms");
          }
          else if (Bluetooth.buttonIsOn(6)) {
-             // openDoor();
-             // Bluetooth.send("Open Door");
+             openDoor();
+             Bluetooth.send("Open Door");
              // Serial.println("Open Door");
          }
          else if (!Bluetooth.buttonIsOn(6)) {
-             // // closeDoor();
+             closeDoor();
              // Serial.println("Close Door");
          }
      }
@@ -246,14 +248,12 @@ void Robot::search() {
 //     return;
     
     //check if the robot is to close to any obstacles on its sides: if yes, stop motors and enter state AVOID
-    if (_ir_objects[ID_SIDE_LEFT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD ||
-    	_ir_objects[ID_SIDE_LEFT_BACK]->getDistance() < SIDE_DIST_THRESHOLD ||
-    	_ir_objects[ID_SIDE_RIGHT_FRONT]->getDistance() < SIDE_DIST_THRESHOLD ||  
-    	_ir_objects[ID_SIDE_RIGHT_BACK]->getDistance() < SIDE_DIST_THRESHOLD ) {
+  //   if (_ir_objects[ID_SIDE_LEFT_BACK]->getDistance() < SIDE_DIST_THRESHOLD || 
+  //   	_ir_objects[ID_SIDE_RIGHT_BACK]->getDistance() < SIDE_DIST_THRESHOLD ) {
 
-		_state = AVOID;
-		return;
-    }
+		// _state = AVOID;
+		// return;
+  //   }
     // Read top IR's to check for obstacles
     // int top_irs[4] = {_ir_objects[ID_FRONT_TOP_LEFT_OUT]->getAvgAnalog(),
     // 	_ir_objects[ID_FRONT_TOP_LEFT_IN]->getDistance(),
@@ -263,32 +263,48 @@ void Robot::search() {
     int top_irs[2] = {_ir_objects[ID_FRONT_TOP_LEFT_IN]->getDistance(),
         _ir_objects[ID_FRONT_TOP_RIGHT_IN]->getDistance()};
 
-    Serial.print(top_irs[0]);
-    Serial.print(", ");
-    Serial.println(top_irs[1]);
+    int side_irs[2] = {_ir_objects[ID_SIDE_LEFT_FRONT]->getAvgAnalog(),
+        _ir_objects[ID_SIDE_RIGHT_FRONT]->getAvgAnalog()};
 
-    // TODO: ADD CASE WHERE BOTTLE IN FRONT OF OBSTACLE THAT IS WITHIN THRESHOLD
+    // Serial.print(side_irs[0]);
+    // Serial.print(", ");
+    // Serial.println(side_irs[1]);
+
+ //    // TODO: ADD CASE WHERE BOTTLE IN FRONT OF OBSTACLE THAT IS WITHIN THRESHOLD
  	if (top_irs[0] < TOP_OBSTACLE_THRESHOLD || top_irs[1] < TOP_OBSTACLE_THRESHOLD) {
 
- 		_motor_left += (int) (_mean_speed/100.0*(top_irs[1] - top_irs[0]) );
- 		_motor_right += (int) (_mean_speed/100.0*(top_irs[0] - top_irs[1]) );
+ 		_motor_left += (int) 1.4*(MEAN_MOTOR_SPEED*(top_irs[1] - top_irs[0])/80.0);
+ 		_motor_right += (int) 1.4*(MEAN_MOTOR_SPEED*(top_irs[0] - top_irs[1])/80.0);
 
-		// // Adjust speed exponentially based on outward top IR's to avoid close calls
-		// _motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
-		// _motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
+    } 
 
- 		setSpeeds(_motor_left,_motor_right);
- 	}
+    if (side_irs[0] > 75 || side_irs[1] > 75) {
+        _motor_left += (int) (MEAN_MOTOR_SPEED*(side_irs[0] - side_irs[1])/150.0);
+        _motor_right += (int) (MEAN_MOTOR_SPEED*(side_irs[1] - side_irs[0])/150.0);
+    }
+
+        // _motor_left = (int) ((top_irs[1] - TARGET)/10.0);
+        // _motor_right = (int) ((top_irs[0] - TARGET)/10.0);
+
+        // Serial.print("Diff: ");
+        // Serial.print(_motor_left);
+        // Serial.print(", ");
+        // Serial.println(_motor_right);
+
+	// 	// // Adjust speed exponentially based on outward top IR's to avoid close calls
+	// 	// _motor_left += (int) ( _mean_speed/700.0*(top_irs[0]-top_irs[3]) );
+	// 	// _motor_right += (int) ( _mean_speed/700.0*(top_irs[3]-top_irs[1]) );
+
+ 		// setSpeeds(_motor_left,_motor_right);
+ 	
 
  	// If no obstacles, search for bottle
-    // int bottom_irs[4] = {_ir_objects[ID_FRONT_BOT_LEFT_OUT]->getDistance(),
-    // 	_ir_objects[ID_FRONT_BOT_LEFT_IN]->getDistance(),
-    // 	_ir_objects[ID_FRONT_BOT_RIGHT_IN]->getDistance(),
-    // 	_ir_objects[ID_FRONT_BOT_RIGHT_OUT]->getDistance()};
-
-
     int bottom_irs[2] = {_ir_objects[ID_FRONT_BOT_LEFT_IN]->getDistance(),
-        _ir_objects[ID_FRONT_BOT_RIGHT_IN]->getDistance()};
+    	_ir_objects[ID_FRONT_BOT_RIGHT_IN]->getDistance()};
+
+
+ // //    int bottom_irs[2] = {_ir_objects[ID_FRONT_BOT_LEFT_IN]->getDistance(),
+ // //        _ir_objects[ID_FRONT_BOT_RIGHT_IN]->getDistance()};
 
 
     // If bottle within the focal distance of the two crossed bottom IR's, go into APPROACH state
@@ -305,34 +321,38 @@ void Robot::search() {
     	return;
     }
 
- //    // Set motors so as to move in bottle direction
- // 	_motor_left += (int) ( _mean_speed/100.0*(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*(bottom_irs[2] - top_irs[1]) );
-	// _motor_right += (int) ( _mean_speed/100.0*-(bottom_irs[0] - top_irs[3]) + _mean_speed/100.0*-(bottom_irs[2] - top_irs[1]) );
+    // Set motors so as to move in bottle direction
+ 	_motor_left += (int) ( MEAN_MOTOR_SPEED/100.0*(bottom_irs[0] - top_irs[1]));
+	_motor_right += (int) ( MEAN_MOTOR_SPEED/100.0*-(bottom_irs[0] - top_irs[1]));
 
 
-    _motor_left += (int) ( _mean_speed/100.0*(bottom_irs[1] - top_irs[0]) );
-    _motor_right += (int) ( -_mean_speed/100.0*(bottom_irs[1] - top_irs[0]) );
+ //    _motor_left += (int) (MEAN_MOTOR_SPEED/100.0*(bottom_irs[1] - top_irs[0]) );
+ //    _motor_right += (int) ( -MEAN_MOTOR_SPEED/100.0*(bottom_irs[1] - top_irs[0]) );
 
     setSpeeds(_motor_left,_motor_right);
+
+    return;
 
 }
 
 void Robot::avoid() {
 
     Serial.println("avoid");
+
+    Serial.println(_bumper_hit);
     stopMotors();
     delay(MOTOR_STOP);
-    setSpeeds(-_motor_left,-_motor_right);// do the reverse movement from before
+    setSpeeds(-(min(MAX_MOTOR_SPEED, _motor_left)),-(min(MAX_MOTOR_SPEED,_motor_right)));// do the reverse movement from before
 
     delay(MOTOR_BACK);
     
     if ((_bumper_hit == 1) | (_bumper_hit == 2)){ // front or back bumpers triggered
         // reverse / forward while turning a little bit
-        setSpeeds(-_motor_left,-_motor_right - DELTA_AVOID);
+        setSpeeds(-(min(MAX_MOTOR_SPEED, _motor_left)),-(min(MAX_MOTOR_SPEED, _motor_right) - DELTA_AVOID));
         delay(MOTOR_TURN);
     }
     else { // side bumpers triggered
-        setSpeeds(_motor_right,_motor_left); // reverse motor signal in order to go on in different direction.
+        setSpeeds((min(MAX_MOTOR_SPEED, _motor_right)),-(min(MAX_MOTOR_SPEED,_motor_left))); // reverse motor signal in order to go on in different direction.
         delay(MOTOR_TURN);
     }
     
@@ -498,6 +518,7 @@ void Robot::stopMotors() {
 void Robot::setSpeeds(int motorleft,int motorright) {
     Wire.beginTransmission(WILDTHUMPER_ADDRESS); // alert device that something is coming: stop the motors
 	Wire.write(motorleft); // sent data
+    delay(100);
 	Wire.write(motorright); // sent data
 	Wire.endTransmission(); // end transaction - i2c free again.
 }
